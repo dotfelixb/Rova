@@ -1,0 +1,17 @@
+<NavLink href="@To">
+<div class="flex bg-white px-3 py-4 rounded border shadow-sm items-center h-11 hover:bg-gray-100 hover:border-gray-200">
+      <div class="flex w-1/2">@Title</div>
+      <div class="flex w-1/2 justify-end">
+        @if(Data is string){
+          <span class="text-xs px-2 py-1 bg-gray-200 rounded">@Data</span>
+        }
+      </div>
+</div>
+</NavLink>
+
+@code {
+  [Parameter] public string To {get;set;}
+  [Parameter] public string Title {get;set;}
+  [Parameter] public string Data {get;set;}
+
+}

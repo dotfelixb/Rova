@@ -1,0 +1,13 @@
+
+<Dashboard Links="@links"></Dashboard>
+
+@code {
+  public readonly Dictionary<string, Tuple<string, string>> links = new Dictionary<string, Tuple<string, string>>
+{
+  {"/hrm", Tuple.Create("HR", "gg-presentation")},
+  {"/crm", Tuple.Create("CRM", "gg-poll")},
+  {"/payroll", Tuple.Create("Payroll", "gg-credit-card")},
+  {"/stock", Tuple.Create("Stock", "gg-database")}
+};
+
+}

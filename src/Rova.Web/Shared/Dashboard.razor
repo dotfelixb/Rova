@@ -1,0 +1,25 @@
+<div>
+  <div class="pb-3">
+    <span class="cursor-default uppercase text-xs font-semibold text-gray-500">
+      Modules
+    </span>
+  </div>
+  <div>
+    @foreach (var item in Links)
+    {
+      <NavLink href="@item.Key">
+        <div class="px-3 py-3 rounded text-gray-600 flex align-middle hover:bg-gray-100 hover:text-gray-800">
+          <span class="w-8"><i class="@item.Value.Item2" /></span>
+          <span class="pl-3 uppercase leading-normal">
+            @item.Value.Item1
+          </span>
+        </div>
+      </NavLink>
+    }
+  </div>
+</div>
+
+@code {
+  [Parameter]
+  public Dictionary<string, Tuple<string, string>> Links { get; set; } = new Dictionary<string, Tuple<string, string>>();
+}

@@ -1,0 +1,22 @@
+@page "/crm"
+
+<PageTitle>Crm</PageTitle>
+
+<PageView>
+  <Title>CRM</Title>
+   <SideView>
+    <AppSideView />
+  </SideView>
+  <Content>
+    <div class="">
+      <div class="text-lg text-gray-500 font-semibold p-3">
+        Your links
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2n xl:grid-cols-3 gap-4 p-3">
+        <AppLink To="/app/customers" Title="Customers" Data="454 active" />
+        <AppLink To="/app/opportunities" Title="Opportunity" Data="4 active" />
+        <AppLink To="/app/leads" Title="Leads" Data="4 active" />
+      </div>
+    </div>
+  </Content>
+</PageView>

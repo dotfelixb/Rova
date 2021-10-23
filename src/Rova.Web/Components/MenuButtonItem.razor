@@ -1,0 +1,9 @@
+ <div class="flex flex-row px-3 py-2 space-x-3 items-center text-gray-500 text-left font-semibold text-xs bg-white rounded hover:bg-gray-100" >
+      <div class="w-4"><i class="@LeadingIconClass" /></div>
+      <div>@Text</div>
+</div>
+
+@code {
+  [Parameter] public string LeadingIconClass {get;set;}
+  [Parameter] public string Text {get;set;}
+}

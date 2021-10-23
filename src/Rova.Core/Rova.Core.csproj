@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Controllers\eawqosqx.k1c~" />
+    <None Remove="Services\" />
+    <None Remove="FluentResults" />
+    <None Remove="Microsoft.Extensions.Http" />
+    <None Remove="NewId" />
+    <None Remove="FluentValidation" />
+    <None Remove="Features\" />
+    <None Remove="Features\Customers\" />
+    <None Remove="Features\Customers\CreateCustomer\" />
+    <None Remove="MediatR" />
+    <None Remove="Extensions\" />
+    <None Remove="AutoMapper" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+    <PackageReference Include="FluentResults" Version="2.6.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+    <PackageReference Include="NewId" Version="3.0.3" />
+    <PackageReference Include="FluentValidation" Version="10.3.3" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Rova.Model\Rova.Model.csproj" />
+    <ProjectReference Include="..\Rova.Data\Rova.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Features\" />
+    <Folder Include="Features\Customers\" />
+    <Folder Include="Features\Customers\CreateCustomer\" />
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+</Project>

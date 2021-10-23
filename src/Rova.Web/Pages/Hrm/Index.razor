@@ -1,0 +1,21 @@
+@page "/hrm"
+
+<PageTitle>Hrm</PageTitle>
+
+<PageView>
+  <Title>HR</Title>
+   <SideView>
+    <AppSideView />
+  </SideView>
+  <Content>
+    <div class="">
+      <div class="text-lg text-gray-500 font-semibold p-3">
+        Your links
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2n xl:grid-cols-3 gap-4 p-3">
+        <AppLink To="/app/employees" Title="Employees" Data="15 active" />   
+        <AppLink To="/hr/jobs" Title="Job Applicant" Data="4 active" />
+      </div>
+    </div>
+  </Content>
+</PageView>

@@ -1,0 +1,47 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+svg {
+    display: inline;
+}
+
+.pageTitle {
+    @apply text-xl font-semibold text-gray-600;
+}
+
+.btn-primary {
+    @apply text-base rounded px-3 py-1 focus:outline-none focus:ring-2 bg-indigo-500 text-white hover:bg-indigo-600 focus:ring-indigo-800;
+}
+
+.btn-default {
+    @apply text-base rounded px-3 py-1 focus:outline-none focus:ring-2 bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-900 focus:ring-gray-400;
+}
+
+.btn-primary-disabled {
+    @apply bg-indigo-400 text-gray-300 cursor-not-allowed;
+}
+
+.btn-default-disabled {
+    @apply bg-gray-200 text-gray-400 cursor-not-allowed;
+}
+
+.input-default {
+    @apply block text-sm p-2 rounded bg-gray-50 focus:ring-2;
+}
+
+.input-primary {
+    @apply border-gray-300 focus:border-indigo-300 focus:ring-indigo-300;
+}
+
+.input-error {
+    @apply border-red-400 focus:border-red-300 focus:ring-red-300;
+}
+
+.input-filter {
+    @apply w-full text-xs text-gray-700 outline-none rounded px-3 py-1 border border-gray-300 focus:border-indigo-300 focus:ring-1 focus:ring-indigo-300
+}
+
+.btn-paginate {
+    @apply w-10 text-center text-xs hover:bg-gray-300 cursor-pointer px-3 py-1 hover:text-black
+}

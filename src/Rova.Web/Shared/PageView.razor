@@ -1,0 +1,23 @@
+﻿<div>
+  <div class="flex flex-row xl:px-48  bg-white py-5 pt-20 border-b border-gray-200 fixed w-full z-10">
+    <div class="container flex flex-row mx-auto items-center h-5">
+      <div class="w-1/2 flex ">@Title</div>
+      <div class="w-1/2 flex justify-end">@Toolbar</div>
+    </div>
+  </div>
+  <div class="flex flex-row xl:px-48 pt-28 bg-white">
+    <div class="container flex flex-row mx-auto pt-2">
+      <div class="hidden flex-col w-1/6 lg:flex xl:flex py-3 pr-3">
+        @SideView
+      </div>
+      <div class="w-5/6 border-r border-b border-l mb-20">@Content</div>
+    </div>
+  </div>
+</div>
+
+@code {
+  [Parameter] public RenderFragment Title { get; set; }
+  [Parameter] public RenderFragment SideView { get; set; }
+  [Parameter] public RenderFragment Toolbar { get; set; }
+  [Parameter] public RenderFragment Content { get; set; }
+}

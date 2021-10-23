@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31717.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BFFEE59A-5383-458D-BD3A-BC9D140357BC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rova.Web", "src\Rova.Web\Rova.Web.csproj", "{05FCAC04-A297-446F-AB4E-BB100D218C26}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8BFF8E27-58C1-4A41-9B6A-52E423327B2E}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rova.Core", "src\Rova.Core\Rova.Core.csproj", "{4DF039C3-D664-458A-A516-7292880EB8E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rova.Model", "src\Rova.Model\Rova.Model.csproj", "{ACAE9802-8F99-4CEF-AF0D-025BF47EDF55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rova.Data", "src\Rova.Data\Rova.Data.csproj", "{5CBFCA3A-EFA1-48FF-8032-EDFF9F5ED743}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{05FCAC04-A297-446F-AB4E-BB100D218C26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05FCAC04-A297-446F-AB4E-BB100D218C26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05FCAC04-A297-446F-AB4E-BB100D218C26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05FCAC04-A297-446F-AB4E-BB100D218C26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DF039C3-D664-458A-A516-7292880EB8E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DF039C3-D664-458A-A516-7292880EB8E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DF039C3-D664-458A-A516-7292880EB8E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DF039C3-D664-458A-A516-7292880EB8E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACAE9802-8F99-4CEF-AF0D-025BF47EDF55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACAE9802-8F99-4CEF-AF0D-025BF47EDF55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACAE9802-8F99-4CEF-AF0D-025BF47EDF55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACAE9802-8F99-4CEF-AF0D-025BF47EDF55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CBFCA3A-EFA1-48FF-8032-EDFF9F5ED743}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CBFCA3A-EFA1-48FF-8032-EDFF9F5ED743}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CBFCA3A-EFA1-48FF-8032-EDFF9F5ED743}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CBFCA3A-EFA1-48FF-8032-EDFF9F5ED743}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{05FCAC04-A297-446F-AB4E-BB100D218C26} = {BFFEE59A-5383-458D-BD3A-BC9D140357BC}
+		{4DF039C3-D664-458A-A516-7292880EB8E6} = {BFFEE59A-5383-458D-BD3A-BC9D140357BC}
+		{ACAE9802-8F99-4CEF-AF0D-025BF47EDF55} = {BFFEE59A-5383-458D-BD3A-BC9D140357BC}
+		{5CBFCA3A-EFA1-48FF-8032-EDFF9F5ED743} = {BFFEE59A-5383-458D-BD3A-BC9D140357BC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {93078E0F-0344-4F97-97AD-C2DDF0CE4E57}
+	EndGlobalSection
+EndGlobal

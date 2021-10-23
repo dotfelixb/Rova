@@ -1,0 +1,57 @@
+@using System.Text
+    
+    <button
+      class="@MainClassName" @onclick="ToggleOpen" disabled="@Disable"
+    >
+      <div class="flex flex-row items-center space-x-1">
+        <div>@Text</div> 
+        <i class="gg-chevron-down" />
+      </div>
+      @if(IsOpen){
+        <button @onclick="ToggleOpen" @onclick:stopPropagation="true" 
+              class="fixed inset-0 bg-gray-50 opacity-5 w-full h-full cursor-default" 
+              tabIndex={-1}></button>
+      }
+      <div class="@OpenClassName">
+        @if(ChildContent is {}){
+          @ChildContent
+        }
+      </div>
+    </button>
+
+    @code {
+      [Parameter] public string Text {get;set;} = "Menu";
+      [Parameter] public RenderFragment ChildContent {get;set;}
+      [Parameter] public bool Disable {get;set;}
+      [Parameter] public string ButtonType {get;set;} = "default";
+      
+      public string MainClassName {get;set;}
+      public string OpenClassName {get;set;}
+      public bool IsOpen {get;set;}  
+
+      protected override void OnInitialized( ){
+        var className = new StringBuilder("relative z-10 "); 
+      
+        switch(ButtonType){
+          case "primary": {
+            if(Disable) { className.Append("btn-primary-disabled");}
+            className.Append("btn-primary"); break;
+          }
+          default: {
+            if(Disable) { className.Append("btn-default-disabled");}
+            className.Append("btn-default"); break;
+          }
+        }
+
+        MainClassName = className.ToString();
+        OpenClassName = "absolute left-0 bg-white mt-2 p-1 rounded shadow-lg transition-all hidden";
+      }
+
+     private void ToggleOpen(){
+       IsOpen = !IsOpen;
+
+       OpenClassName = IsOpen 
+          ? OpenClassName.Replace("hidden", "")
+          : OpenClassName + " hidden "; 
+     } 
+}

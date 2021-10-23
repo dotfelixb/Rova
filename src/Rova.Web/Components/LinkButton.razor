@@ -1,0 +1,38 @@
+<NavLink href="@To" >
+      <div class="@MainClassName"> 
+        @if(LeadingIconClass is string){
+          <span class="mr-1">
+            <i class="@LeadingIconClass"/>
+          </span> 
+        }
+        <span>@Title</span>
+      </div>
+</NavLink>
+
+@code {
+      [Parameter] public string To {get; set;}
+      [Parameter] public string Title {get; set;}
+      [Parameter] public string LeadingIconClass {get; set;}
+      [Parameter] public bool Disable {get; set;}
+      [Parameter] public string ButtonType {get;set;} = "default";
+      public string MainClassName {get;set;}
+
+      protected override void OnInitialized( ){
+        var className = new StringBuilder("text-base flex items-center cursor-pointer px-3 py-1 rounded "); 
+      
+        switch(ButtonType){
+          case "primary": {
+            if(Disable) { className.Append("btn-primary-disabled");}
+            className.Append(" bg-indigo-500 text-white hover:bg-indigo-600"); 
+            break;
+          }
+          default: {
+            if(Disable) { className.Append("btn-default-disabled");}
+            className.Append(" bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-gray-900"); 
+            break;
+          }
+        }
+
+        MainClassName = className.ToString(); 
+      }
+}

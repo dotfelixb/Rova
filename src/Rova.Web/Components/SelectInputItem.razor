@@ -1,0 +1,12 @@
+<option value="@Value">
+    @if(Label is string){
+      @Label
+    }else{
+      @Value
+    }
+</option>  
+
+@code {
+   [Parameter] public string Label {get;set;}
+   [Parameter] public string Value {get;set;}
+}

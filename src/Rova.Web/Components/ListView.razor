@@ -1,0 +1,39 @@
+ <div class="bg-indigo-50 flex">
+        <div class="w-1/2 flex space-x-6 px-3 py-2">
+          <div>
+            <input
+              id="id"
+              name="id"
+              type="text"
+              class="input-filter"
+              placeholder="Id"
+            />
+          </div>
+          <div>
+            <input
+              id="first_name"
+              name="first_name"
+              type="text"
+              class="input-filter"
+              placeholder="First Name"
+            />
+          </div>
+        </div>
+        <div class="w-1/2 flex justify-end  px-3 py-2">
+          <div class="flex">
+            <div class="btn-paginate rounded-l bg-gray-500 text-white">
+              20
+            </div>
+            <div class="btn-paginate bg-gray-200 text-gray-700">
+              50
+            </div>
+            <div class="btn-paginate rounded-r bg-gray-200 text-gray-700">
+              100
+            </div>
+          </div>
+        </div>
+</div>
+
+@code { 
+  public string Active {get;set;}
+}

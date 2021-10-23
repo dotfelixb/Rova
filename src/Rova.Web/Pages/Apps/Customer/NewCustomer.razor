@@ -1,0 +1,135 @@
+@page "/app/customers/new"
+@using Rova.Core.Features.Customers.CreateCustomer
+@inject ILogger<NewCustomer> Logger
+@inject Rova.Core.Services.CustomerService CustomerService
+@inject NavigationManager NavigationManager
+
+<PageTitle>New Customer</PageTitle>
+
+<PageView>
+    <Title>
+        <div>
+            <span class="pageTitle">New Customer</span>
+            <span class="ml-3 text-xs text-red-300 bg-red-50 px-3 py-1 rounded">
+                Not Saved
+            </span>
+        </div>
+    </Title>
+    <Toolbar>
+        <div class="flex flex-row space-x-2">
+            <div>
+                <Button Text="Save" ButtonType="primary" OnClick="@HandleOnValidSubmit" />
+            </div>
+        </div>
+    </Toolbar>
+    <SideView>
+    </SideView>
+    <Content>
+        <EditForm Model="@customer" OnValidSubmit="@HandleOnValidSubmit">
+            <div class="p-5">
+                <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                    Basic Information
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-2 gap-5">
+                    <SelectInput Label="Title" @bind-Value="@customer.Title">
+                        <SelectInputItem Value="" />
+                        <SelectInputItem Value="Mr." />
+                        <SelectInputItem Value="Mrs." />
+                        <SelectInputItem Value="Miss." />
+                        <SelectInputItem Value="Ms." />
+                        <SelectInputItem Value="Prof." />
+                        <SelectInputItem Value="Dr." />
+                    </SelectInput>
+                    <TextInput Label="Display Name" @bind-Value="@customer.DisplayName" Error="true" />
+                    <TextInput Label="First Name" @bind-Value="@customer.FirstName" />
+                    <TextInput Label="Company" @bind-Value="@customer.Company" />
+                    <TextInput Label="Last Name" @bind-Value="@customer.LastName" />
+                    <TextInput Label="Phone" @bind-Value="@customer.Phone" />
+                    <SelectInput Label="Type" @bind-Value="@customer.CustomerType">
+                        <SelectInputItem Value="Company" />
+                        <SelectInputItem Value="Individual" />
+                    </SelectInput>
+                    <TextInput Label="Mobile" @bind-Value="@customer.Mobile" />
+                    <TextInput Label="Website" @bind-Value="@customer.Website" />
+                    <TextInput Label="Email" @bind-Value="@customer.Email" />
+                </div>
+            </div>
+
+            <div class="p-5">
+                <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                    Billing Address
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 ">
+                    <TextInput Label="Street Name" @bind-Value="@customer.BillingStreet" />
+                    <TextInput Label="City" @bind-Value="@customer.BillingCity" />
+                    <TextInput Label="State" @bind-Value="@customer.BillingState" />
+                    <CheckInput Label="Same as shipping" @bind-Value="@customer.ShipBilling" />
+                </div>
+            </div>
+
+            <div class="p-5">
+                <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                    Shipping Address
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 ">
+                    <TextInput Label="Street Name" @bind-Value="@customer.ShippingStreet" />
+                    <TextInput Label="City" @bind-Value="@customer.ShippingCity" />
+                    <TextInput Label="State" @bind-Value="@customer.ShippingState" />
+                </div>
+            </div>
+
+            <div class="p-5">
+                <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                    Payment
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 ">
+                    <SelectInput Label="Preferred Method" @bind-Value="@customer.PreferredMethod">
+                        <SelectInputItem Value="Cheque" />
+                        <SelectInputItem Value="Cash" />
+                    </SelectInput>
+                    <SelectInput Label="Preferred Delivery" @bind-Value="@customer.PreferredDelivery">
+                        <SelectInputItem Value="Email" />
+                        <SelectInputItem Value="SMS" />
+                        <SelectInputItem Value="Postal" />
+                        <SelectInputItem Value="Dispatch" />
+                    </SelectInput>
+                    <TextInput Label="Opening Balance" @bind-Value="@customer.OpeningBalance" />
+                    <TextInput Label="Balance As Of" @bind-Value="@customer.OpeningBalanceAt" Type="date" />
+                </div>
+            </div>
+
+            <div class="p-5">
+                <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                    Extra
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 ">
+                    <CheckInput Label="Is Sub Customer" @bind-Value="@customer.SubCustomer" />
+                    <TextInput Label="Parent Customer" @bind-Value="@customer.ParentCustomer" />
+                    <CheckInput Label="Bill parent" @bind-Value="@customer.BillParent" />
+                    <div class="grid space-y-2"> </div>
+                    <TextInput Label="Tax ID" @bind-Value="@customer.TaxId" />
+                    <CheckInput Label="Tax Exempted" @bind-Value="@customer.TaxExempted" />
+                </div>
+            </div>
+
+        </EditForm>
+    </Content>
+</PageView>
+
+
+@code {
+    CreateCustomerCommand customer = new();
+    ElementReference FormRef;
+
+    async void HandleOnValidSubmit()
+    {
+        Logger.LogInformation("Submitting data for NewCustomer");
+        var result = await CustomerService.CreateCustomer(customer);
+        Logger.LogInformation("Create New Customer process complete");
+
+        if (result.Ok)
+        {
+            NavigationManager.NavigateTo("/app/customers");
+        }
+    }
+}
