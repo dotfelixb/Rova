@@ -5,4 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="ViewDomain\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewDomain\" />
+  </ItemGroup>
 </Project>

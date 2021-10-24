@@ -13,7 +13,7 @@ namespace Rova.Core
         [JsonPropertyName("errors")]
         public IEnumerable<string> Errors { get; set; }
         [JsonPropertyName("ts")]
-        public TimeSpan Ts { get; set; } = (DateTime.Now - DateTime.MinValue);
+        public long Ts { get; set; } = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
     }
 

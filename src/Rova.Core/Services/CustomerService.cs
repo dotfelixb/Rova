@@ -6,28 +6,43 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Rova.Core.Extensions;
 using Rova.Core.Features.Customers.CreateCustomer;
+using Rova.Model.Domain;
 
 namespace Rova.Core.Services
 {
-    public class CustomerService 
+    public class CustomerService
     {
         private readonly IHttpClientFactory ClientFactory;
 
-        public CustomerService(IHttpClientFactory clientFactory)  
+        public CustomerService(IHttpClientFactory clientFactory)
         {
             ClientFactory = clientFactory;
         }
 
+        public async Task<ListResult<Customer>> ListCustomer(int offset = 0, int limit = 100)
+        {
+            var route = $"/methods/customers.list?offset={offset}&limit={limit}";
+
+            var client = ClientFactory.CreateClient("Default");
+
+            var response = await client.GetAsync(route);
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var rst = JsonSerializer.Deserialize<ListResult<Customer>>(responseBody);
+
+            return rst;
+        }
+
         public async Task<SingleResult<Guid>> CreateCustomer(CreateCustomerCommand command)
         {
-            var route = "/methods/customer.create";
+            var route = "/methods/customers.create";
             var content = command.ToJsonStringContent();
 
             var client = ClientFactory.CreateClient("Default");
 
-            var response  = await client.PostAsync(route, content);
+            var response = await client.PostAsync(route, content);
             var responseBody = await response.Content.ReadAsStringAsync();
-           
+
             var rst = JsonSerializer.Deserialize<SingleResult<Guid>>(responseBody);
             return rst;
         }

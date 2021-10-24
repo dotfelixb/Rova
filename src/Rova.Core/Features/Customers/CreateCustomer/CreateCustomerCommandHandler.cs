@@ -33,8 +33,19 @@ namespace Rova.Core.Features.Customers.CreateCustomer
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
 
+            var code = await _customerRepository.GenerateCustomerCode();
+            var customerCode = $"{code}";
+
             var customer = _mapper.Map<CreateCustomerCommand, Customer>(request);
             customer.Id = NewId.NextGuid();
+            // TODO: Handle Prefix
+            customer.Code = $"CU{customerCode.PadLeft(6, '0')}";
+
+            // check if displayname is null
+            if (customer.DisplayName is null)
+            {
+                customer.DisplayName = $"{customer.FirstName} {customer.LastName}";
+            }
 
             var auditLog = new DbAuditLog
             {

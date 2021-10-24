@@ -6,6 +6,7 @@ namespace Rova.Model.Domain
     public class Customer : DbAudit
     {
         public Guid Id { get; set; }
+        public string Code { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

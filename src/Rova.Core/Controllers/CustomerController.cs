@@ -3,7 +3,8 @@ using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Rova.Core.Features.Customers.CreateCustomer; 
+using Rova.Core.Features.Customers.CreateCustomer;
+using Rova.Core.Features.Customers.ListCustomer;
 
 namespace Rova.Core.Controllers
 {
@@ -18,7 +19,7 @@ namespace Rova.Core.Controllers
             Mediatr = mediatr;
         }
 
-        [HttpGet("customer.get", Name = nameof(GetCustomer))]
+        [HttpGet("customers.get", Name = nameof(GetCustomer))]
         [ProducesResponseType(typeof(SingleResult<Guid>), 201)]
         [ProducesResponseType(typeof(ErrorResult), 404)]
         public async Task<IActionResult> GetCustomer([FromQuery] string customerId)
@@ -27,16 +28,18 @@ namespace Rova.Core.Controllers
             return Ok();
         }
 
-        [HttpGet("customer.list", Name = nameof(ListCustomer))]
+        [HttpGet("customers.list", Name = nameof(ListCustomer))]
         [ProducesResponseType(typeof(SingleResult<Guid>), 201)]
         [ProducesResponseType(typeof(ErrorResult), 400)]
-        public async Task<IActionResult> ListCustomer([FromQuery] string insuredId)
+        public async Task<IActionResult> ListCustomer([FromQuery] ListCustomerCommand model)
         {
-            await Task.Delay(0);
-            return Ok();
+            var result = await Mediatr.Send(model);
+            var rst = JsonSerializer.Serialize(result);
+
+            return Ok(rst);
         }
 
-        [HttpPost("customer.create", Name = nameof(CreateCustomer))]
+        [HttpPost("customers.create", Name = nameof(CreateCustomer))]
         [ProducesResponseType(typeof(SingleResult<Guid>), 201)]
         [ProducesResponseType(typeof(ErrorResult), 400)]
         public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerCommand model)

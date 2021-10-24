@@ -9,6 +9,8 @@ namespace Rova.Data.Repository
 {
     public interface ICustomerRepository
     {
+        Task<IEnumerable<Customer>> List(int offset, int limit);
+        Task<long> GenerateCustomerCode();
         Task<int> Create(Customer customer, DbAuditLog auditLog);
         Task<int> Log(DbAuditLog auditLog);
     }
@@ -21,12 +23,47 @@ namespace Rova.Data.Repository
         {
         }
 
-        public Task<int> Create(Customer customer, DbAuditLog auditLog)
+        public Task<IEnumerable<Customer>> List(int offset = 0, int limit = 1000)
         {
             return WithConnection(conn =>
             {
-                var cmd = @"INSERT INTO public.customer (
-                                id, title, firstname, lastname, birthat, gender
+                var query = @"SELECT id, code, title, firstname
+                                , lastname, birthat, gender, displayname
+                                , company, phone, mobile, website
+                                , email, fromlead, customertype, subcustomer
+                                , parentcustomer, billparent, isinternal, billingstreet
+                                , billingcity, billingstate, shippingstreet, shippingcity
+                                , shippingstate, shipbilling, preferredmethod, preferreddelivery
+                                , openingbalance, openingbalanceat, taxid, taxexempted
+                                , deleted, createdby, createdat, updatedby, updatedat
+                            FROM public.customer
+                            OFFSET @Offset LIMIT @Limit;
+                            ";
+
+                return conn.QueryAsync<Customer>(query, new
+                {
+                    Offset = offset,
+                    Limit = limit
+                });
+            });
+        }
+
+        public Task<long> GenerateCustomerCode()
+        {
+            return WithConnection(conn =>
+            {
+                var query = "SELECT NEXTVAL('CustomerCode');";
+
+                return conn.QuerySingleAsync<long>(query);
+            });
+        }
+
+        public Task<int> Create(Customer customer, DbAuditLog auditLog)
+        {
+            return WithConnection(async conn =>
+            {
+                var custCmd = @"INSERT INTO public.customer (
+                                id, code, title, firstname, lastname, birthat, gender
                                 , displayname, company, phone, mobile, website
                                 , email, fromlead, customertype, subcustomer
                                 , parentcustomer, billparent, isinternal, billingstreet
@@ -36,7 +73,7 @@ namespace Rova.Data.Repository
                                 , createdby, updatedby
                             )
                             VALUES(
-                                @Id, @Title, @FirstName, @LastName, @BirthAt, @Gender
+                                @Id, @Code, @Title, @FirstName, @LastName, @BirthAt, @Gender
                                 , @DisplayName, @Company, @Phone, @Mobile, @Website
                                 , @Email, @FromLead, @CustomerType, @SubCustomer
                                 , @ParentCustomer, @BillParent, @IsInternal, @BillingStreet
@@ -44,20 +81,13 @@ namespace Rova.Data.Repository
                                 , @ShippingState, @ShipBilling, @PreferredMethod, @PreferredDelivery
                                 , @OpeningBalance, @OpeningBalanceAt, @TaxId, @TaxExempted
                                 , @CreatedBy, @UpdatedBy
-                            );
+                            );";
 
-                            INSERT INTO public.customerauditlog (
-                                id, targetid, actionname, objectname
-                                , objectdata, createdby
-                            )
-                            VALUES(@AuditId, @TargetId, @ActionName, @ObjectName
-                                , @ObjectData::jsonb, @AuditCreatedBy
-                            );
-";
 
-                return conn.ExecuteAsync(cmd, new
+                var createdCustomer = await conn.ExecuteAsync(custCmd, new
                 {
                     customer.Id,
+                    customer.Code,
                     customer.Title,
                     customer.FirstName,
                     customer.LastName,
@@ -91,13 +121,27 @@ namespace Rova.Data.Repository
                     customer.CreatedBy,
                     customer.UpdatedBy,
 
-                    AuditId = auditLog.Id,
+                });
+
+                var logCmd = @"INSERT INTO public.customerauditlog (
+                                id, targetid, actionname, objectname
+                                , objectdata, createdby
+                            )
+                            VALUES(@Id, @TargetId, @ActionName, @ObjectName
+                                , @ObjectData::jsonb, @CreatedBy
+                            );";
+
+                var createdLog = await conn.ExecuteAsync(logCmd, new
+                {
+                    auditLog.Id,
                     auditLog.TargetId,
                     auditLog.ActionName,
                     auditLog.ObjectName,
                     auditLog.ObjectData,
-                    AuditCreatedBy = auditLog.CreatedBy
+                    auditLog.CreatedBy
                 });
+
+                return (createdCustomer + createdLog);
             });
         }
 

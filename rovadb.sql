@@ -79,9 +79,12 @@ CREATE TABLE IF NOT EXISTS UserRoles
 
 ALTER TABLE UserRoles ADD PRIMARY KEY (userid, roleid);
 
+CREATE SEQUENCE CustomerCode INCREMENT 1 START 1;
+
 CREATE TABLE IF NOT EXISTS Customer 
 (
 	id UUID PRIMARY KEY
+	, code VARCHAR(20)
 	, title VARCHAR(10)
 	, firstname VARCHAR(50)
 	, lastname VARCHAR(50)
