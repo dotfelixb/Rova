@@ -33,21 +33,16 @@
         </div>
     </div>
     <div>
-        <table class="w-full table-fixed divide-y">
+        <table class="items-center bg-transparent w-full border-collapse divide-y divide-gray-200">
             <thead class="bg-indigo-50">
                 <tr class="leading-6">
                     @foreach (var head in Heading)
                     {
-                        <th class="text-left">@head</th>
+                        <th class="px-3 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">@head</th>
                     }
                 </tr>
             </thead>
-            <tbody>
-                <tr  class="px-3 py-2">
-                    <td>CO234234</td>
-                    <td>Normal user</td>
-                    <td>Sept 12, 1995</td>
-                </tr>
+            <tbody class="bg-white divide-y divide-gray-200">
                 @foreach (var row in DataSource)
                 {
                     var id = string.Empty;
@@ -57,8 +52,10 @@
                         var getValue = idField.GetValue(row, null) ?? new object();
                         id = getValue.ToString();
                     }
+                    even += 1;
+                    var cssEven = even % 2 == 0 ? "bg-gray-50" : "";
 
-                    <tr class="px-3 py-2 leading-6">
+                    <tr class="@cssEven">
 
                         @foreach (var col in Columns)
                         {
@@ -76,7 +73,7 @@
                                         var urlFormat = col.Value.Where(c => c.Key == "format").FirstOrDefault().Value;
                                         var uri = string.Format(urlFormat, id);
                                         
-                                        <td>
+                                        <td class="border-t-0 px-3 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-3">
                                             <a href="@uri">@value</a>
                                         </td>
                                         break;
@@ -87,13 +84,13 @@
                                         var dateGet = DateTimeOffset.Parse(value);
                                         var date = dateGet.ToString(dateFormat);
                                         
-                                       <td>
+                                       <td class="border-t-0 px-3 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-3">
                                            <span>@date</span>
                                         </td>
                                         break;
                                     }
                                     default: {
-                                       <td>
+                                       <td class="border-t-0 px-3 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-3">
                                            <span>@value</span>
                                         </td>
                                         break;
@@ -115,6 +112,7 @@
     public string Active { get; set; }
     public IEnumerable<TItem> Rows { get; set; }
     public List<string> Heading { get; set; } = new List<string>();
+    public int even = 0;
 
     protected override void OnInitialized()
     {
