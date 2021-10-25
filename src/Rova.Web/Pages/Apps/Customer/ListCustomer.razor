@@ -7,7 +7,7 @@
 <PageTitle>List Customers</PageTitle>
 
 <PageView>
-    <Title>Customers</Title>
+    <Title></Title>
     <Toolbar>
         <div class="px-1">
             <MenuButton>
@@ -24,18 +24,47 @@
         <div>
             <div class="pb-3">
                 <span class="cursor-default uppercase text-xs font-semibold text-gray-500">
-                    Actions
+                    Customers
                 </span>
             </div>
         </div>
     </SideView>
     <Content>
-        <ListView></ListView>
+        <ListView TItem="Customer" Columns="@Columns" DataSource="@Customers"></ListView>
     </Content>
 </PageView>
 
 @code {
-    public IEnumerable<Customer> Customers { get; set; }
+    public Dictionary<string, Dictionary<string, string>> Columns = new()
+    {
+            {
+                "Code",
+                new()
+            {
+                    { "display", "Code" },
+                    { "type", "link" },
+                    { "format", "/app/customers/{0}" }
+                }
+            },
+            {
+                "DisplayName",
+                new()
+            {
+                    { "display", "Name" }
+                }
+            },
+            {
+                "CreatedAt",
+                new()
+            {
+                    { "display", "Created Date" },
+                    { "type", "date" },
+                     { "format", "MMM dd, yyyy" }
+                }
+            }
+        };
+
+    public IEnumerable<Customer> Customers { get; set; } = Enumerable.Empty<Customer>();
 
     protected override async Task OnInitializedAsync()
     {
