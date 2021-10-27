@@ -19,6 +19,20 @@ namespace Rova.Core.Services
             ClientFactory = clientFactory;
         }
 
+        public async Task<SingleResult<Customer>> GetCustomer(Guid customerId)
+        {
+            var route = $"/methods/customers.get?customerid={customerId}";
+
+            var client = ClientFactory.CreateClient("Default");
+
+            var response = await client.GetAsync(route);
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var rst = JsonSerializer.Deserialize<SingleResult<Customer>>(responseBody);
+
+            return rst;
+        }
+
         public async Task<ListResult<Customer>> ListCustomer(int offset = 0, int limit = 100)
         {
             var route = $"/methods/customers.list?offset={offset}&limit={limit}";

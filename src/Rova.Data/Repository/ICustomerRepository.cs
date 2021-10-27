@@ -9,6 +9,7 @@ namespace Rova.Data.Repository
 {
     public interface ICustomerRepository
     {
+        Task<Customer> Get(Guid customerId);
         Task<IEnumerable<Customer>> List(int offset, int limit);
         Task<long> GenerateCustomerCode();
         Task<int> Create(Customer customer, DbAuditLog auditLog);
@@ -21,6 +22,30 @@ namespace Rova.Data.Repository
             IOptions<ConnectionStringOptions> options)
             : base(options)
         {
+        }
+
+        public Task<Customer> Get(Guid customerId)
+        {
+            return WithConnection(conn =>
+            {
+                var query = @"SELECT id, code, title, firstname
+                                , lastname, birthat, gender, displayname
+                                , company, phone, mobile, website
+                                , email, fromlead, customertype, subcustomer
+                                , parentcustomer, billparent, isinternal, billingstreet
+                                , billingcity, billingstate, shippingstreet, shippingcity
+                                , shippingstate, shipbilling, preferredmethod, preferreddelivery
+                                , openingbalance, openingbalanceat, taxid, taxexempted
+                                , deleted, createdby, createdat, updatedby, updatedat
+                            FROM public.customer
+                            WHERE id = @CustomerId;
+                            ";
+
+                return conn.QueryFirstOrDefaultAsync<Customer>(query, new
+                {
+                    CustomerId = customerId
+                });
+            });
         }
 
         public Task<IEnumerable<Customer>> List(int offset = 0, int limit = 1000)

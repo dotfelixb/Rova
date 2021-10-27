@@ -1,39 +1,129 @@
- <div class="bg-indigo-50 flex">
+@typeparam TItem
+
+<div>
+    <div class="bg-indigo-50 flex">
         <div class="w-1/2 flex space-x-6 px-3 py-2">
-          <div>
-            <input
-              id="id"
-              name="id"
-              type="text"
-              class="input-filter"
-              placeholder="Id"
-            />
-          </div>
-          <div>
-            <input
-              id="first_name"
-              name="first_name"
-              type="text"
-              class="input-filter"
-              placeholder="First Name"
-            />
-          </div>
+            <div>
+                <input id="id"
+                       name="id"
+                       type="text"
+                       class="input-filter"
+                       placeholder="Id" />
+            </div>
+            <div>
+                <input id="first_name"
+                       name="first_name"
+                       type="text"
+                       class="input-filter"
+                       placeholder="First Name" />
+            </div>
         </div>
         <div class="w-1/2 flex justify-end  px-3 py-2">
-          <div class="flex">
-            <div class="btn-paginate rounded-l bg-gray-500 text-white">
-              20
+            <div class="flex">
+                <div class="btn-paginate rounded-l bg-gray-500 text-white">
+                    20
+                </div>
+                <div class="btn-paginate bg-gray-200 text-gray-700">
+                    50
+                </div>
+                <div class="btn-paginate rounded-r bg-gray-200 text-gray-700">
+                    100
+                </div>
             </div>
-            <div class="btn-paginate bg-gray-200 text-gray-700">
-              50
-            </div>
-            <div class="btn-paginate rounded-r bg-gray-200 text-gray-700">
-              100
-            </div>
-          </div>
         </div>
+    </div>
+    <div>
+        <table class="items-center bg-transparent w-full border-collapse divide-y divide-gray-200">
+            <thead class="bg-indigo-50">
+                <tr class="leading-6">
+                    @foreach (var head in Heading)
+                    {
+                        <th class="px-3 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">@head</th>
+                    }
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach (var row in DataSource)
+                {
+                    var id = string.Empty;
+                    var idField = row.GetType().GetProperty("Id");
+                    if (idField is { })
+                    {
+                        var getValue = idField.GetValue(row, null) ?? new object();
+                        id = getValue.ToString();
+                    }
+                    even += 1;
+                    var cssEven = even % 2 == 0 ? "bg-gray-50" : "";
+
+                    <tr class="@cssEven">
+
+                        @foreach (var col in Columns)
+                        {
+                            var info = row.GetType().GetProperty(col.Key);
+                            var type = col.Value.Where(c => c.Key == "type").FirstOrDefault().Value;
+
+                            if (info is { })
+                            {
+                                var getValue = info.GetValue(row, null) ?? new object();
+                                string value = getValue.ToString();
+                                
+                                switch(type){
+                                    case "link": {
+                                        // if is a link get the url format
+                                        var urlFormat = col.Value.Where(c => c.Key == "format").FirstOrDefault().Value;
+                                        var uri = string.Format(urlFormat, id);
+                                        
+                                        <td class="border-t-0 px-3 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-3">
+                                            <a href="@uri">@value</a>
+                                        </td>
+                                        break;
+                                    }
+                                    case "date": {
+                                        // if is a link get the url format
+                                        var dateFormat = col.Value.Where(c => c.Key == "format").FirstOrDefault().Value;
+                                        var dateGet = DateTimeOffset.Parse(value);
+                                        var date = dateGet.ToString(dateFormat);
+                                        
+                                       <td class="border-t-0 px-3 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-3">
+                                           <span>@date</span>
+                                        </td>
+                                        break;
+                                    }
+                                    default: {
+                                       <td class="border-t-0 px-3 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-3">
+                                           <span>@value</span>
+                                        </td>
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
-@code { 
-  public string Active {get;set;}
+@code {
+    [Parameter] public Dictionary<string, Dictionary<string, string>> Columns { get; set; } = new();
+    [Parameter] public IEnumerable<TItem> DataSource { get; set; } = Enumerable.Empty<TItem>();
+
+    public string Active { get; set; }
+    public IEnumerable<TItem> Rows { get; set; }
+    public List<string> Heading { get; set; } = new List<string>();
+    public int even = 0;
+
+    protected override void OnInitialized()
+    {
+        // build the header
+        foreach (var col in Columns)
+        {
+            var key = col.Value.Where(v => v.Key == "display").FirstOrDefault();
+            if (key is { } subKey)
+            {
+                Heading.Add(subKey.Value);
+            }
+        }
+    }
 }

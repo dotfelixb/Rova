@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Rova.Core.Features.Customers.CreateCustomer;
+using Rova.Core.Features.Customers.GetCustomer;
 using Rova.Core.Features.Customers.ListCustomer;
 
 namespace Rova.Core.Controllers
@@ -22,10 +23,17 @@ namespace Rova.Core.Controllers
         [HttpGet("customers.get", Name = nameof(GetCustomer))]
         [ProducesResponseType(typeof(SingleResult<Guid>), 201)]
         [ProducesResponseType(typeof(ErrorResult), 404)]
-        public async Task<IActionResult> GetCustomer([FromQuery] string customerId)
+        public async Task<IActionResult> GetCustomer([FromQuery] GetCustomerCommand model)
         {
-            await Task.Delay(0);
-            return Ok();
+            var result = await Mediatr.Send(model);
+            var rst = JsonSerializer.Serialize(result);
+
+            if (!result.Ok)
+            {
+                return NotFound(rst);
+            }
+
+            return Ok(rst);
         }
 
         [HttpGet("customers.list", Name = nameof(ListCustomer))]
