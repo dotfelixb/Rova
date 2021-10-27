@@ -11,7 +11,8 @@ using Rova.Model.Domain;
 namespace Rova.Core.Features.Customers.CreateCustomer
 {
 
-    public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, SingleResult<Guid>>
+    public class CreateCustomerCommandHandler
+        : IRequestHandler<CreateCustomerCommand, SingleResult<Guid>>
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;

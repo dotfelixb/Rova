@@ -1,0 +1,133 @@
+﻿@page "/app/customers/{Id:guid}"
+@using Rova.Model.Domain
+@inject ILogger<GetCustomer> Logger
+@inject Rova.Core.Services.CustomerService CustomerService
+
+@if(ShowBasicInfoForm){
+    <FormModal Title="Editing Basic Infomation" OnClose="@CloseBasicInfoForm" OnSubmit="@HandleBasicInfoFormSubmit">
+        <EditForm Model="@customer" OnValidSubmit="@HandleBasicInfoFormSubmit">
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 mt-4"> 
+                    <TextInput Label="First Name" @bind-Value="@customer.FirstName" />
+                    <TextInput Label="Last Name" @bind-Value="@customer.LastName" />
+                    <TextInput Label="Display Name" @bind-Value="@customer.DisplayName" Error="true" /> 
+                </div>
+            <div class="grid grid-cols-2 lg:grid-cols-2 gap-5 mt-5">
+                    <SelectInput Label="Title" @bind-Value="@customer.Title">
+                        <SelectInputItem Value="" />
+                        <SelectInputItem Value="Mr." />
+                        <SelectInputItem Value="Mrs." />
+                        <SelectInputItem Value="Miss." />
+                        <SelectInputItem Value="Ms." />
+                        <SelectInputItem Value="Prof." />
+                        <SelectInputItem Value="Dr." />
+                    </SelectInput> 
+                    <TextInput Label="Phone" @bind-Value="@customer.Phone" />
+                    <SelectInput Label="Customer Type" @bind-Value="@customer.CustomerType">
+                        <SelectInputItem Value="Company" />
+                        <SelectInputItem Value="Individual" />
+                    </SelectInput>
+                    <TextInput Label="Mobile" @bind-Value="@customer.Mobile" /> 
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 mt-5"> 
+                    <TextInput Label="Company" @bind-Value="@customer.Company" />
+                    <TextInput Label="Website" @bind-Value="@customer.Website" />
+                    <TextInput Label="Email" @bind-Value="@customer.Email" />
+                </div>
+        </EditForm>
+    </FormModal>
+}
+
+@if (customer is null)
+{
+
+}
+else
+{
+    <PageTitle>@customer.DisplayName</PageTitle>
+
+    <PageView>
+        <Title>@customer.DisplayName</Title>
+        <Toolbar>
+            <div class="px-1">
+                <MenuButton>
+                    <MenuButtonItem Text="Print" LeadingIconClass="gg-printer" />
+                    <MenuButtonItem Text="Report" LeadingIconClass="gg-file" />
+                    <MenuButtonItem Text="DashBoard" leadingIconClass="gg-board" />
+                </MenuButton>
+            </div>
+        </Toolbar>
+        <SideView>
+            <div></div>
+        </SideView>
+        <Content> 
+            <EditForm Model="@customer">
+                <div class="p-5">
+                    <div class="flex">
+                        <div class="flex w-1/2 text-xs text-gray-300 font-semibold pb-3 uppercase">
+                            <div>Basic Information</div> 
+                        </div>
+                        <div class="flex w-1/2 justify-end">
+                            <Button Text="Edit" ButtonType="primary" OnClick="@OpenBasicInfoForm" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 lg:grid-cols-2 gap-5">
+                        <TextInput Label="Title" @bind-Value="@customer.Title" />
+                        <TextInput Label="Display Name" @bind-Value="@customer.DisplayName" />
+                        <TextInput Label="First Name" @bind-Value="@customer.FirstName" />
+                        <TextInput Label="Company" @bind-Value="@customer.Company" />
+                        <TextInput Label="Last Name" @bind-Value="@customer.LastName" />
+                        <TextInput Label="Phone" @bind-Value="@customer.Phone" />
+                        <TextInput Label="Type" @bind-Value="@customer.CustomerType" /> 
+                        <TextInput Label="Mobile" @bind-Value="@customer.Mobile" />
+                        <TextInput Label="Website" @bind-Value="@customer.Website" />
+                        <TextInput Label="Email" @bind-Value="@customer.Email" />
+                    </div>
+                </div>
+            </EditForm>
+        </Content>
+    </PageView>
+}
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    public bool ShowBasicInfoForm { get; set; }
+    public Customer customer { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Logger.LogInformation($"Fetching Customer with Id [{Id}]");
+
+            var result = await CustomerService.GetCustomer(Id);
+
+            if (result.Ok)
+            {
+                customer = result.Data;
+            }
+            else
+            {
+                throw new Exception();
+            }
+
+            StateHasChanged();
+            Logger.LogInformation("Fetching Customer with Id [{0}] complete with status [{1}]", Id, result.Ok ? "Success" : "Failed");
+        }
+    }
+
+    protected void HandleBasicInfoFormSubmit()
+    {
+        Logger.LogInformation("Submitting Basic Info Form...");
+    }
+
+    private void OpenBasicInfoForm(){
+        ShowBasicInfoForm = true;
+        StateHasChanged();
+    }
+
+    private void CloseBasicInfoForm(){
+        ShowBasicInfoForm = false;
+        StateHasChanged();
+    }
+}
+

@@ -10,9 +10,7 @@
     <Title>
         <div>
             <span class="pageTitle">New Customer</span>
-            <span class="ml-3 text-xs text-red-300 bg-red-50 px-3 py-1 rounded">
-                Not Saved
-            </span>
+            <NotSaved />
         </div>
     </Title>
     <Toolbar>
@@ -45,7 +43,7 @@
                     <TextInput Label="Company" @bind-Value="@customer.Company" />
                     <TextInput Label="Last Name" @bind-Value="@customer.LastName" />
                     <TextInput Label="Phone" @bind-Value="@customer.Phone" />
-                    <SelectInput Label="Type" @bind-Value="@customer.CustomerType">
+                    <SelectInput Label="Customer Type" @bind-Value="@customer.CustomerType">
                         <SelectInputItem Value="Company" />
                         <SelectInputItem Value="Individual" />
                     </SelectInput>

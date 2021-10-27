@@ -19,6 +19,7 @@
     <None Remove="Extensions\" />
     <None Remove="AutoMapper" />
     <None Remove="Features\Customers\ListCustomer\" />
+    <None Remove="Features\Customers\GetCustomer\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,5 +45,6 @@
     <Folder Include="Features\Customers\CreateCustomer\" />
     <Folder Include="Extensions\" />
     <Folder Include="Features\Customers\ListCustomer\" />
+    <Folder Include="Features\Customers\GetCustomer\" />
   </ItemGroup>
 </Project>
