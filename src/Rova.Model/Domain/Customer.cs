@@ -43,6 +43,13 @@ namespace Rova.Model.Domain
         public string TaxId { get; set; }
         public bool TaxExempted { get; set; }
     }
+    
+    public class CustomerExtended : Customer
+    {
+        public string FromLeadName { get; set; } 
+
+        public string ParentCustomerName { get; set; } 
+    }
 
     public class CustomerAuditLog : DbAuditLog
     {

@@ -133,6 +133,36 @@ CREATE TABLE IF NOT EXISTS CustomerAuditLog
 	, createdat TIMESTAMPTZ DEFAULT(now())
 )
 
+CREATE TABLE IF NOT EXISTS Lead 
+(
+	id UUID PRIMARY KEY
+	, code VARCHAR(20) 
+	, title VARCHAR(10)
+	, firstname VARCHAR(50)
+	, lastname VARCHAR(50)
+	, birthat DATE
+	, gender VARCHAR(20)
+	, displayname VARCHAR(100)
+	, company VARCHAR(50)
+	, phone VARCHAR(20)
+	, mobile VARCHAR(20)
+	, website VARCHAR(50)
+	, email VARCHAR(30)
+	, compaign UUID
+	, leadtype VARCHAR(15)
+	, addresstype VARCHAR(50)
+	, addressstreet VARCHAR(50)
+	, addresscity VARCHAR(50)
+	, addressstate VARCHAR(50) 
+	, marketsegment VARCHAR(50) 
+	, industry VARCHAR(50) 
+	, subscribed BOOLEAN DEFAULT(TRUE)
+	, deleted BOOLEAN DEFAULT(FALSE)
+	, createdby UUID
+	, createdat TIMESTAMPTZ DEFAULT(now())
+	, updatedby UUID
+	, updatedat TIMESTAMPTZ DEFAULT(now())
+);
 
 
 

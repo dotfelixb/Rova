@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Options;
 using Npgsql;
@@ -9,8 +11,8 @@ namespace Rova.Data.Repository
 {
     public interface ICustomerRepository
     {
-        Task<Customer> Get(Guid customerId);
-        Task<IEnumerable<Customer>> List(int offset, int limit);
+        Task<CustomerExtended> Get(Guid customerId);
+        Task<IEnumerable<CustomerExtended>> List(int offset, int limit);
         Task<long> GenerateCustomerCode();
         Task<int> Create(Customer customer, DbAuditLog auditLog);
         Task<int> Log(DbAuditLog auditLog);
@@ -24,15 +26,17 @@ namespace Rova.Data.Repository
         {
         }
 
-        public Task<Customer> Get(Guid customerId)
+        public Task<CustomerExtended> Get(Guid customerId)
         {
             return WithConnection(conn =>
             {
                 var query = @"SELECT id, code, title, firstname
                                 , lastname, birthat, gender, displayname
                                 , company, phone, mobile, website
-                                , email, fromlead, customertype, subcustomer
-                                , parentcustomer, billparent, isinternal, billingstreet
+                                , email, fromlead, (SELECT displayname FROM lead WHERE id = fromlead)  AS fromleadname
+                                , customertype, subcustomer, parentcustomer
+                                , (SELECT displayname FROM customer WHERE id = parentcustomer)  AS parentcustomername
+                                , billparent, isinternal, billingstreet
                                 , billingcity, billingstate, shippingstreet, shippingcity
                                 , shippingstate, shipbilling, preferredmethod, preferreddelivery
                                 , openingbalance, openingbalanceat, taxid, taxexempted
@@ -41,22 +45,24 @@ namespace Rova.Data.Repository
                             WHERE id = @CustomerId;
                             ";
 
-                return conn.QueryFirstOrDefaultAsync<Customer>(query, new
+                return conn.QueryFirstOrDefaultAsync<CustomerExtended>(query, new
                 {
                     CustomerId = customerId
                 });
             });
         }
 
-        public Task<IEnumerable<Customer>> List(int offset = 0, int limit = 1000)
+        public Task<IEnumerable<CustomerExtended>> List(int offset = 0, int limit = 1000)
         {
             return WithConnection(conn =>
             {
                 var query = @"SELECT id, code, title, firstname
                                 , lastname, birthat, gender, displayname
                                 , company, phone, mobile, website
-                                , email, fromlead, customertype, subcustomer
-                                , parentcustomer, billparent, isinternal, billingstreet
+                                , email, fromlead, (SELECT displayname FROM lead WHERE id = fromlead)  AS fromleadname
+                                , customertype, subcustomer, parentcustomer
+                                , (SELECT displayname FROM customer WHERE id = parentcustomer)  AS parentcustomername
+                                , billparent, isinternal, billingstreet
                                 , billingcity, billingstate, shippingstreet, shippingcity
                                 , shippingstate, shipbilling, preferredmethod, preferreddelivery
                                 , openingbalance, openingbalanceat, taxid, taxexempted
@@ -65,7 +71,7 @@ namespace Rova.Data.Repository
                             OFFSET @Offset LIMIT @Limit;
                             ";
 
-                return conn.QueryAsync<Customer>(query, new
+                return conn.QueryAsync<CustomerExtended>(query, new
                 {
                     Offset = offset,
                     Limit = limit

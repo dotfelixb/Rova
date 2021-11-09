@@ -1,4 +1,6 @@
-﻿namespace Rova.Model.Domain
+﻿using System;
+
+namespace Rova.Model.Domain
 {
     public class DbAudit
     {
