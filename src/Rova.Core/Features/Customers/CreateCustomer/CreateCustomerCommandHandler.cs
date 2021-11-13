@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Transactions;
 using AutoMapper;
 using MassTransit;
 using MediatR;
+using Rova.Core.Extensions;
 using Rova.Data.Repository;
 using Rova.Model.Domain;
 
@@ -35,18 +38,14 @@ namespace Rova.Core.Features.Customers.CreateCustomer
             };
 
             var code = await _customerRepository.GenerateCustomerCode();
-            var customerCode = $"{code}";
 
             var customer = _mapper.Map<CreateCustomerCommand, Customer>(request);
             customer.Id = NewId.NextGuid();
             // TODO: Handle Prefix
-            customer.Code = $"CU{customerCode.PadLeft(6, '0')}";
+            customer.Code = code.FormatCode("CU");
 
             // check if displayname is null
-            if (customer.DisplayName is null)
-            {
-                customer.DisplayName = $"{customer.FirstName} {customer.LastName}";
-            }
+            customer.DisplayName ??= $"{customer.FirstName} {customer.LastName}";
 
             var auditLog = new DbAuditLog
             {
@@ -55,11 +54,11 @@ namespace Rova.Core.Features.Customers.CreateCustomer
                 ActionName = "schedule.create",
                 ObjectName = "schedule",
                 ObjectData = JsonSerializer.Serialize(customer, jsonOptions),
-                CreatedBy = NewId.NextGuid(),
-                CreatedAt = DateTimeOffset.Now
+                // TODO: Fix user
+                CreatedBy = NewId.NextGuid()
             };
 
-            var rst = await _customerRepository.Create(customer, auditLog);
+            var rst = await _customerRepository.CreateCustomer(customer, auditLog);
             if (rst < 1)
             {
                 return new SingleResult<Guid>

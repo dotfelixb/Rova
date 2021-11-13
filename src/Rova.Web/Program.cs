@@ -13,6 +13,7 @@ using Rova.Core;
 using Rova.Core.Services;
 using Rova.Data.Repository;
 using Rova.Model;
+using Rova.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,16 +33,22 @@ builder.Services.AddHttpClient("Default", c =>
     IHttpContextAccessor context = new HttpContextAccessor();
     var request = context?.HttpContext?.Request;
     c.BaseAddress = new Uri($"{request?.Scheme}://{request?.Host}");
-    c.Timeout = TimeSpan.FromSeconds(120);
+
+#if DEBUG
+    c.Timeout = TimeSpan.FromSeconds(36000);
+#else
+     c.Timeout = TimeSpan.FromSeconds(120);
+#endif
 
     c.DefaultRequestHeaders.Add("User-Agent", "Rova-Web");
-    //c.DefaultRequestHeaders.Add("Accept", "application/json");
-    //c.DefaultRequestHeaders.Add("Content-Type", "application/json");
 });
 builder.Services.AddSingleton<ICustomerRepository, CustomerRepository>();
+builder.Services.AddSingleton<ILeadRepository, LeadRepository>();
 
 // Register Rova Services
 builder.Services.AddSingleton<CustomerService>();
+builder.Services.AddSingleton<LeadService>();
+builder.Services.AddScoped<Breadcrumb>();
 
 
 var app = builder.Build();

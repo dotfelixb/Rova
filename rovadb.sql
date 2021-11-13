@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS Lead
 	, mobile VARCHAR(20)
 	, website VARCHAR(50)
 	, email VARCHAR(30)
-	, compaign UUID
+	, campaign UUID
 	, leadtype VARCHAR(15)
 	, addresstype VARCHAR(50)
 	, addressstreet VARCHAR(50)
@@ -164,6 +164,16 @@ CREATE TABLE IF NOT EXISTS Lead
 	, updatedat TIMESTAMPTZ DEFAULT(now())
 );
 
+CREATE TABLE IF NOT EXISTS LeadAuditLog 
+(
+	id UUID PRIMARY KEY
+	, targetId UUID
+	, actionname VARCHAR(50) 
+	, objectname VARCHAR(50)
+	, objectdata JSONB
+	, createdby UUID
+	, createdat TIMESTAMPTZ DEFAULT(now())
+);
 
-
+CREATE SEQUENCE LeadCode INCREMENT 1 START 1;
 

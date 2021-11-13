@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
+using System.Threading.Tasks;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +23,7 @@ namespace Rova.Core.Controllers
         }
 
         [HttpGet("customers.get", Name = nameof(GetCustomer))]
-        [ProducesResponseType(typeof(SingleResult<Guid>), 201)]
+        [ProducesResponseType(typeof(SingleResult<Guid>), 200)]
         [ProducesResponseType(typeof(ErrorResult), 404)]
         public async Task<IActionResult> GetCustomer([FromQuery] GetCustomerCommand model)
         {
@@ -37,7 +39,7 @@ namespace Rova.Core.Controllers
         }
 
         [HttpGet("customers.list", Name = nameof(ListCustomer))]
-        [ProducesResponseType(typeof(SingleResult<Guid>), 201)]
+        [ProducesResponseType(typeof(SingleResult<Guid>), 200)]
         [ProducesResponseType(typeof(ErrorResult), 400)]
         public async Task<IActionResult> ListCustomer([FromQuery] ListCustomerCommand model)
         {
@@ -61,7 +63,7 @@ namespace Rova.Core.Controllers
             }
 
             var baseUri = $"{Request.Scheme}://{Request.Host}";
-            var uri = $"{baseUri}/methods/customer.get?customerId={result.Data}";
+            var uri = $"{baseUri}/methods/customers.get?customerId={result.Data}";
 
             return Created(uri, rst);
         }

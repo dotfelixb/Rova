@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject Components.Breadcrumb Crumb;
 
 <PageTitle>Index</PageTitle>
 
@@ -13,6 +14,12 @@
 </PageView>
 
 @code {
-  
+  protected override void OnInitialized()
+  {
+    Crumb.SetRoute(new LinkData[] {
+    });
+        
+    Crumb.OnChange += StateHasChanged;
+  }
 
 }

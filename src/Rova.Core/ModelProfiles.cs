@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Rova.Core.Extensions;
 using Rova.Core.Features.Customers.CreateCustomer;
+using Rova.Core.Features.Leads.CreateLead;
 using Rova.Model.Domain;
 
 namespace Rova.Core
@@ -16,6 +17,10 @@ namespace Rova.Core
                     opt => opt.MapFrom(s => s.OpeningBalanceAt.ToDateTimeTz()))
                 .ForMember(d => d.OpeningBalance,
                     opt => opt.MapFrom(s => s.OpeningBalance.ToDecimal()));
+
+            CreateMap<CreateLeadCommand, Lead>()
+                .ForMember(d=>d.Campaign,
+                    opt => opt.MapFrom(s=> s.Campaign.ToGuid()));
 
         }
     }

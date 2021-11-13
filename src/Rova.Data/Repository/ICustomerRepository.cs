@@ -14,7 +14,7 @@ namespace Rova.Data.Repository
         Task<CustomerExtended> Get(Guid customerId);
         Task<IEnumerable<CustomerExtended>> List(int offset, int limit);
         Task<long> GenerateCustomerCode();
-        Task<int> Create(Customer customer, DbAuditLog auditLog);
+        Task<int> CreateCustomer(Customer customer, DbAuditLog auditLog);
         Task<int> Log(DbAuditLog auditLog);
     }
 
@@ -89,7 +89,7 @@ namespace Rova.Data.Repository
             });
         }
 
-        public Task<int> Create(Customer customer, DbAuditLog auditLog)
+        public Task<int> CreateCustomer(Customer customer, DbAuditLog auditLog)
         {
             return WithConnection(async conn =>
             {
@@ -162,7 +162,7 @@ namespace Rova.Data.Repository
                                 , @ObjectData::jsonb, @CreatedBy
                             );";
 
-                var createdLog = await conn.ExecuteAsync(logCmd, new
+                var createLog = await conn.ExecuteAsync(logCmd, new
                 {
                     auditLog.Id,
                     auditLog.TargetId,
@@ -172,7 +172,7 @@ namespace Rova.Data.Repository
                     auditLog.CreatedBy
                 });
 
-                return (createdCustomer + createdLog);
+                return (createdCustomer + createLog);
             });
         }
 

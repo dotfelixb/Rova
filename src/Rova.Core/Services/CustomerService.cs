@@ -35,7 +35,7 @@ namespace Rova.Core.Services
             return rst;
         }
 
-        public async Task<ListResult<Customer>> ListCustomer(int offset = 0, int limit = 100)
+        public async Task<ListResult<Customer>> ListCustomer(int offset = 0, int limit = 1000)
         {
             var route = $"/methods/customers.list?offset={offset}&limit={limit}";
 
