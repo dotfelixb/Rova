@@ -3,8 +3,6 @@ using System.Net;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +11,6 @@ using Rova.Core;
 using Rova.Core.Services;
 using Rova.Data.Repository;
 using Rova.Model;
-using Rova.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +45,6 @@ builder.Services.AddSingleton<ILeadRepository, LeadRepository>();
 // Register Rova Services
 builder.Services.AddSingleton<CustomerService>();
 builder.Services.AddSingleton<LeadService>();
-builder.Services.AddScoped<Breadcrumb>();
 
 
 var app = builder.Build();

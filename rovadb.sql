@@ -53,6 +53,16 @@ CREATE TABLE IF NOT EXISTS Users
 	, updatedat TIMESTAMPTZ DEFAULT(now())
 );
 
+INSERT INTO users(id, username, displayname, enabled, createdby, updatedby) 
+VALUES(
+	'00000000-0000-0000-0000-000000000001', 
+	'root', 
+	'Root', 
+	TRUE, 
+	'00000000-0000-0000-0000-000000000001', 
+	'00000000-0000-0000-0000-000000000001'
+)
+
 CREATE TABLE IF NOT EXISTS Roles
 (
 	id UUID PRIMARY KEY	
@@ -64,6 +74,14 @@ CREATE TABLE IF NOT EXISTS Roles
 	, updatedby UUID
 	, updatedat TIMESTAMPTZ DEFAULT(now())
 );
+INSERT INTO roles (id, rolename, enabled, createdby, updatedby)
+VALUES(
+	'00000000-0000-0000-0000-000000000001', 
+	'root', 
+	TRUE, 
+	'00000000-0000-0000-0000-000000000001', 
+	'00000000-0000-0000-0000-000000000001'
+)
 
 CREATE TABLE IF NOT EXISTS UserRoles
 (
@@ -79,7 +97,14 @@ CREATE TABLE IF NOT EXISTS UserRoles
 
 ALTER TABLE UserRoles ADD PRIMARY KEY (userid, roleid);
 
-CREATE SEQUENCE CustomerCode INCREMENT 1 START 1;
+INSERT INTO userroles (userid, roleid, enabled, createdby, updatedby)
+VALUES(
+	'00000000-0000-0000-0000-000000000001', 
+	'00000000-0000-0000-0000-000000000001', 
+	TRUE, 
+	'00000000-0000-0000-0000-000000000001', 
+	'00000000-0000-0000-0000-000000000001'
+)
 
 CREATE TABLE IF NOT EXISTS Customer 
 (
@@ -133,6 +158,8 @@ CREATE TABLE IF NOT EXISTS CustomerAuditLog
 	, createdat TIMESTAMPTZ DEFAULT(now())
 )
 
+CREATE SEQUENCE CustomerCode INCREMENT 1 START 1;
+
 CREATE TABLE IF NOT EXISTS Lead 
 (
 	id UUID PRIMARY KEY
@@ -149,6 +176,7 @@ CREATE TABLE IF NOT EXISTS Lead
 	, website VARCHAR(50)
 	, email VARCHAR(30)
 	, campaign UUID
+	, status VARCHAR(30)
 	, leadtype VARCHAR(15)
 	, addresstype VARCHAR(50)
 	, addressstreet VARCHAR(50)
@@ -176,4 +204,30 @@ CREATE TABLE IF NOT EXISTS LeadAuditLog
 );
 
 CREATE SEQUENCE LeadCode INCREMENT 1 START 1;
+
+CREATE TABLE IF NOT EXISTS Campaign 
+(
+	id UUID PRIMARY KEY
+	, code VARCHAR(20) 
+	, displayname VARCHAR(100)
+	, location VARCHAR(250)
+	, deleted BOOLEAN DEFAULT(FALSE)
+	, createdby UUID
+	, createdat TIMESTAMPTZ DEFAULT(now())
+	, updatedby UUID
+	, updatedat TIMESTAMPTZ DEFAULT(now())
+);
+
+CREATE TABLE IF NOT EXISTS CampaignAuditLog 
+(
+	id UUID PRIMARY KEY
+	, targetId UUID
+	, actionname VARCHAR(50) 
+	, objectname VARCHAR(50)
+	, objectdata JSONB
+	, createdby UUID
+	, createdat TIMESTAMPTZ DEFAULT(now())
+);
+
+CREATE SEQUENCE CampaignCode INCREMENT 1 START 1;
 

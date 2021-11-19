@@ -4,7 +4,6 @@
 @inject ILogger<NewLead> Logger
 @inject Rova.Core.Services.LeadService LeadService
 @inject NavigationManager NavigationManager
-@inject Components.Breadcrumb Crumb;
 
 <PageTitle>New Lead</PageTitle>
 
@@ -117,14 +116,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Crumb.OnChange += StateHasChanged;
-
-        Crumb.SetRoute(new LinkData[] {
-            new LinkData{ Title = "Leads", Link = "/app/leads"}
-        });
-        Crumb.OnChange += StateHasChanged;
-
-        await Task.Delay(0);    
     }
     
     async void HandleOnValidSubmit()

@@ -1,5 +1,4 @@
 ﻿@inherits LayoutComponentBase
-@inject Components.Breadcrumb Crumb;
 
 <PageTitle>Rova.Web</PageTitle>
 
@@ -13,15 +12,6 @@
               Home
             </span>
           </NavLink>
-          @foreach (var ld in Crumb.Routes)
-          {
-              <span class="ml-3">
-                <i class="gg-chevron-right text-xs" style="display: inline;"></i>
-              </span>
-              <NavLink href="@ld.Link" >
-                <span class="text-xs">@ld.Title</span>
-              </NavLink>
-          }
         </div>
       </div>
       <div class="w-1/2 flex items-center justify-end">
