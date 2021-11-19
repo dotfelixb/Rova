@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Rova.Data.Repository;
@@ -26,17 +28,13 @@ namespace Rova.Core.Features.Customers.GetCustomer
             , CancellationToken cancellationToken)
         {
             var rst = await _customerRepository.Get(request.CustomerId);
-            var ok = true;
 
             if (rst.Id == Guid.Empty)
             {
                 return new SingleResult<Customer>
                 {
                     Data = rst,
-                    Errors = new[]
-                    {
-                        $"Customer with Id '{request.CustomerId}' not found"
-                    }
+                    Errors = new[]  {  $"Customer with Id '{request.CustomerId}' not found" }
                 };
             }
 

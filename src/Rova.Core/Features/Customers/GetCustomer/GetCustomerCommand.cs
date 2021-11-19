@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using Rova.Model.Domain;
 
 namespace Rova.Core.Features.Customers.GetCustomer

@@ -1,0 +1,134 @@
+@page "/app/leads/new"
+@using Microsoft.Extensions.Logging
+@using Rova.Core.Features.Leads.CreateLead
+@inject ILogger<NewLead> Logger
+@inject Rova.Core.Services.LeadService LeadService
+@inject NavigationManager NavigationManager
+
+<PageTitle>New Lead</PageTitle>
+
+<PageView>
+    <Title>
+        <div>
+            <span class="pageTitle">New Lead</span>
+            <NotSaved />
+        </div>
+    </Title>
+    <Toolbar>
+        <div class="flex flex-row space-x-2">
+            <div>
+                <Button Text="Save" ButtonType="primary" OnClick="@HandleOnValidSubmit" />
+            </div>
+        </div>
+    </Toolbar>
+    <SideView>
+    </SideView>
+    <Content>
+        <EditForm Model="@lead" OnValidSubmit="@HandleOnValidSubmit">
+            <div class="p-5">
+                <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                    Basic Information
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-2 gap-5">
+                    <SelectInput Label="Title" @bind-Value="@lead.Title">
+                        <SelectInputItem Value="" />
+                        <SelectInputItem Value="Mr." />
+                        <SelectInputItem Value="Mrs." />
+                        <SelectInputItem Value="Miss." />
+                        <SelectInputItem Value="Ms." />
+                        <SelectInputItem Value="Prof." />
+                        <SelectInputItem Value="Dr." />
+                    </SelectInput>
+                    <TextInput Label="Display Name" @bind-Value="@lead.DisplayName" Error="true"/>
+                    <TextInput Label="First Name" @bind-Value="@lead.FirstName" />
+                    <SelectInput Label="Status" @bind-Value="@lead.Status">
+                        <SelectInputItem Value="Lead"/>
+                        <SelectInputItem Value="Open"/>
+                        <SelectInputItem Value="Replied"/>
+                        <SelectInputItem Value="Opportunity"/>
+                        <SelectInputItem Value="Quotation"/>
+                        <SelectInputItem Value="Lost Quotation"/>
+                        <SelectInputItem Value="Interested"/>
+                        <SelectInputItem Value="Converted"/>
+                        <SelectInputItem Value="Do Not Contact"/>
+                    </SelectInput>
+                    <TextInput Label="Last Name" @bind-Value="@lead.LastName" />
+                    <SelectInput Label="Gender" @bind-Value="@lead.Gender">
+                        <SelectInputItem Value=""/>
+                        <SelectInputItem Value="Male"/>
+                        <SelectInputItem Value="Female"/>
+                        <SelectInputItem Value="Other"/>
+                    </SelectInput>
+                    <SelectInput Label="Lead Type" @bind-Value="@lead.LeadType">
+                        <SelectInputItem Value="Company"/>
+                        <SelectInputItem Value="Individual"/>
+                    </SelectInput>
+                    <TextInput Label="Company" @bind-Value="@lead.Company"/> 
+                    <div></div>
+                    <TextInput Label="Email" @bind-Value="@lead.Email"/> 
+                    <div></div>
+                    <TextInput Label="Source" @bind-Value="@lead.Source"/>
+                    <div></div>
+                    <TextInput Label="Campaign Name" @bind-Value="@lead.Campaign"/>
+                    <div></div>
+
+                </div>
+            </div>
+            
+            <div class="p-5">
+                <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                    Address & Contact
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-2 gap-5">
+                    <SelectInput Label="Address Type" @bind-Value="@lead.AddressType">
+                        <SelectInputItem Value="Billing"/>
+                        <SelectInputItem Value="Shipping"/>
+                        <SelectInputItem Value="Office"/>
+                        <SelectInputItem Value="Residence"/>
+                    </SelectInput>
+                    <TextInput Label="Phone" @bind-Value="@lead.Phone"/> 
+                    <TextInput Label="Address Street" @bind-Value="@lead.AddressStreet"/>
+                    <TextInput Label="Mobile" @bind-Value="@lead.Mobile"/> 
+                    <TextInput Label="Address City" @bind-Value="@lead.AddressCity"/> 
+                    <TextInput Label="Website" @bind-Value="@lead.Website"/> 
+                    <TextInput Label="Address State" @bind-Value="@lead.AddressState"/>
+                </div>
+            </div>
+            
+            <div class="p-5">
+                <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                    Extra
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-2 gap-5">
+                    <TextInput Label="Market Segment" @bind-Value="@lead.Market"/>
+                    <div></div>
+                    <TextInput Label="Industry" @bind-Value="@lead.Industry"/>
+                     <div></div>
+                    <CheckInput Label="Subscribe" @bind-Value="@lead.Subscribed"/>
+                </div>
+            </div>
+        </EditForm>
+    </Content>
+</PageView>
+
+@code {
+    CreateLeadCommand lead = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+    
+    async void HandleOnValidSubmit()
+    {
+        Logger.LogInformation("Sending CreateLeadCommand request");
+        var result = await LeadService.CreateLead(lead);
+
+        Logger.LogInformation("Creating Lead request complete with status {0}"
+            , result.Ok ? "Success" : "Failed");
+
+        if (result.Ok)
+        {
+            NavigationManager.NavigateTo("/app/leads");
+        }
+    }
+}

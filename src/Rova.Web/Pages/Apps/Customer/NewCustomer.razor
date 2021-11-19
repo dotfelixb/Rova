@@ -1,5 +1,6 @@
 @page "/app/customers/new"
 @using Rova.Core.Features.Customers.CreateCustomer
+@using Microsoft.Extensions.Logging
 @inject ILogger<NewCustomer> Logger
 @inject Rova.Core.Services.CustomerService CustomerService
 @inject NavigationManager NavigationManager
@@ -124,7 +125,8 @@
 
         var result = await CustomerService.CreateCustomer(customer);
 
-        Logger.LogInformation("Creating Customer request complete with status {0}", result.Ok ? "Success" : "Failed");
+        Logger.LogInformation("Creating Customer request complete with status {0}"
+            , result.Ok ? "Success" : "Failed");
 
         if (result.Ok)
         {

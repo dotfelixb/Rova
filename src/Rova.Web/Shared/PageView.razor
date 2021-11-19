@@ -1,6 +1,7 @@
 ﻿<div>
   <div class="flex flex-row xl:px-48  bg-white py-5 pt-20 border-b border-gray-200 fixed w-full z-10">
     <div class="container flex flex-row mx-auto items-center h-5">
+      <div class="absolute">@Breadcrumbs</div>
       <div class="w-1/2 flex ">@Title</div>
       <div class="w-1/2 flex justify-end">@Toolbar</div>
     </div>
@@ -16,6 +17,7 @@
 </div>
 
 @code {
+  [Parameter] public RenderFragment Breadcrumbs { get; set; }
   [Parameter] public RenderFragment Title { get; set; }
   [Parameter] public RenderFragment SideView { get; set; }
   [Parameter] public RenderFragment Toolbar { get; set; }

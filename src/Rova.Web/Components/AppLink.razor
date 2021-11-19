@@ -1,3 +1,4 @@
+
 <NavLink href="@To">
 <div class="flex bg-white px-3 py-4 rounded border shadow-sm items-center h-11 hover:bg-gray-100 hover:border-gray-200">
       <div class="flex w-1/2">@Title</div>
@@ -13,5 +14,9 @@
   [Parameter] public string To {get;set;}
   [Parameter] public string Title {get;set;}
   [Parameter] public string Data {get;set;}
+
+  protected override void OnInitialized()
+  {
+  }
 
 }

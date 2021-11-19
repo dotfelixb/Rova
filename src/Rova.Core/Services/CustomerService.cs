@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Rova.Core.Extensions;
 using Rova.Core.Features.Customers.CreateCustomer;
@@ -33,7 +35,7 @@ namespace Rova.Core.Services
             return rst;
         }
 
-        public async Task<ListResult<Customer>> ListCustomer(int offset = 0, int limit = 100)
+        public async Task<ListResult<Customer>> ListCustomer(int offset = 0, int limit = 1000)
         {
             var route = $"/methods/customers.list?offset={offset}&limit={limit}";
 

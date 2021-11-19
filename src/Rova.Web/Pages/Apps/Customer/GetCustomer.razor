@@ -1,38 +1,66 @@
 ﻿@page "/app/customers/{Id:guid}"
 @using Rova.Model.Domain
+@using Microsoft.Extensions.Logging
 @inject ILogger<GetCustomer> Logger
 @inject Rova.Core.Services.CustomerService CustomerService
 
-@if(ShowBasicInfoForm){
+@if (ShowBasicInfoForm)
+{
     <FormModal Title="Editing Basic Infomation" OnClose="@CloseBasicInfoForm" OnSubmit="@HandleBasicInfoFormSubmit">
         <EditForm Model="@customer" OnValidSubmit="@HandleBasicInfoFormSubmit">
-            <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 mt-4"> 
-                    <TextInput Label="First Name" @bind-Value="@customer.FirstName" />
-                    <TextInput Label="Last Name" @bind-Value="@customer.LastName" />
-                    <TextInput Label="Display Name" @bind-Value="@customer.DisplayName" Error="true" /> 
-                </div>
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 mt-4">
+                <TextInput Label="First Name" @bind-Value="@customer.FirstName" />
+                <TextInput Label="Last Name" @bind-Value="@customer.LastName" />
+                <TextInput Label="Display Name" @bind-Value="@customer.DisplayName" Error="true" />
+            </div>
             <div class="grid grid-cols-2 lg:grid-cols-2 gap-5 mt-5">
-                    <SelectInput Label="Title" @bind-Value="@customer.Title">
-                        <SelectInputItem Value="" />
-                        <SelectInputItem Value="Mr." />
-                        <SelectInputItem Value="Mrs." />
-                        <SelectInputItem Value="Miss." />
-                        <SelectInputItem Value="Ms." />
-                        <SelectInputItem Value="Prof." />
-                        <SelectInputItem Value="Dr." />
-                    </SelectInput> 
-                    <TextInput Label="Phone" @bind-Value="@customer.Phone" />
-                    <SelectInput Label="Customer Type" @bind-Value="@customer.CustomerType">
-                        <SelectInputItem Value="Company" />
-                        <SelectInputItem Value="Individual" />
-                    </SelectInput>
-                    <TextInput Label="Mobile" @bind-Value="@customer.Mobile" /> 
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 mt-5"> 
-                    <TextInput Label="Company" @bind-Value="@customer.Company" />
-                    <TextInput Label="Website" @bind-Value="@customer.Website" />
-                    <TextInput Label="Email" @bind-Value="@customer.Email" />
-                </div>
+                <SelectInput Label="Title" @bind-Value="@customer.Title">
+                    <SelectInputItem Value="" />
+                    <SelectInputItem Value="Mr." />
+                    <SelectInputItem Value="Mrs." />
+                    <SelectInputItem Value="Miss." />
+                    <SelectInputItem Value="Ms." />
+                    <SelectInputItem Value="Prof." />
+                    <SelectInputItem Value="Dr." />
+                </SelectInput>
+                <TextInput Label="Phone" @bind-Value="@customer.Phone" />
+                <SelectInput Label="Customer Type" @bind-Value="@customer.CustomerType">
+                    <SelectInputItem Value="Company" />
+                    <SelectInputItem Value="Individual" />
+                </SelectInput>
+                <TextInput Label="Mobile" @bind-Value="@customer.Mobile" />
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 mt-5">
+                <TextInput Label="Company" @bind-Value="@customer.Company" />
+                <TextInput Label="Website" @bind-Value="@customer.Website" />
+                <TextInput Label="Email" @bind-Value="@customer.Email" />
+            </div>
+        </EditForm>
+    </FormModal>
+}
+
+@if (ShowBillingAddress)
+{
+    <FormModal Title="Editing Billing Address" OnClose="@CloseBiilingAddressForm" OnSubmit="@HandleBillingAddressFormSubmit">
+        <EditForm Model="@customer" OnValidSubmit="@HandleBillingAddressFormSubmit">
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 mt-4">
+                <TextInput Label="Street Name" @bind-Value="@customer.BillingStreet" />
+                <TextInput Label="City" @bind-Value="@customer.BillingCity" />
+                <TextInput Label="State" @bind-Value="@customer.BillingState" />
+            </div>
+        </EditForm>
+    </FormModal>
+}
+
+@if (ShowShippingAddress)
+{
+    <FormModal Title="Editing Basic Infomation" OnClose="@CloseShippingAddressForm" OnSubmit="@HandleShippingAddressFormSubmit">
+        <EditForm Model="@customer" OnValidSubmit="@HandleShippingAddressFormSubmit">
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 mt-4">
+                <TextInput Label="Street Name" @bind-Value="@customer.ShippingStreet" />
+                <TextInput Label="City" @bind-Value="@customer.ShippingCity" />
+                <TextInput Label="State" @bind-Value="@customer.ShippingState" />
+            </div>
         </EditForm>
     </FormModal>
 }
@@ -59,12 +87,12 @@ else
         <SideView>
             <div></div>
         </SideView>
-        <Content> 
+        <Content>
             <EditForm Model="@customer">
                 <div class="p-5">
                     <div class="flex">
                         <div class="flex w-1/2 text-xs text-gray-300 font-semibold pb-3 uppercase">
-                            <div>Basic Information</div> 
+                            <div>Basic Information</div>
                         </div>
                         <div class="flex w-1/2 justify-end">
                             <Button Text="Edit" ButtonType="primary" OnClick="@OpenBasicInfoForm" />
@@ -77,10 +105,68 @@ else
                         <TextInput Label="Company" @bind-Value="@customer.Company" />
                         <TextInput Label="Last Name" @bind-Value="@customer.LastName" />
                         <TextInput Label="Phone" @bind-Value="@customer.Phone" />
-                        <TextInput Label="Type" @bind-Value="@customer.CustomerType" /> 
+                        <TextInput Label="Type" @bind-Value="@customer.CustomerType" />
                         <TextInput Label="Mobile" @bind-Value="@customer.Mobile" />
                         <TextInput Label="Website" @bind-Value="@customer.Website" />
                         <TextInput Label="Email" @bind-Value="@customer.Email" />
+                    </div>
+                </div>
+
+                <div class="p-5">
+                    <div class="flex">
+                        <div class="flex w-1/2 text-xs text-gray-300 font-semibold pb-3 uppercase">
+                            <div>Billing Address</div>
+                        </div>
+                        <div class="flex w-1/2 justify-end">
+                            <Button Text="Edit" ButtonType="primary" OnClick="@OpenBillingAddressForm" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 ">
+                        <TextInput Label="Street Name" @bind-Value="@customer.BillingStreet" />
+                        <TextInput Label="City" @bind-Value="@customer.BillingCity" />
+                        <TextInput Label="State" @bind-Value="@customer.BillingState" />
+                    </div>
+                </div>
+
+                <div class="p-5">
+                    <div class="flex">
+                        <div class="flex w-1/2 text-xs text-gray-300 font-semibold pb-3 uppercase">
+                            <div>Shipping Address</div>
+                        </div>
+                        <div class="flex w-1/2 justify-end">
+                            <Button Text="Edit" ButtonType="primary" OnClick="@OpenShippingAddressForm" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 ">
+                        <TextInput Label="Street Name" @bind-Value="@customer.ShippingStreet" />
+                        <TextInput Label="City" @bind-Value="@customer.ShippingCity" />
+                        <TextInput Label="State" @bind-Value="@customer.ShippingState" />
+                    </div>
+                </div>
+
+                <div class="p-5">
+                    <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                        Payment
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 ">
+                        <TextInput Label="Preferred Method" @bind-Value="@customer.PreferredMethod" />
+                        <TextInput Label="Preferred Delivery" @bind-Value="@customer.PreferredDelivery" />
+                        @*<TextInput Label="Opening Balance" @bind-Value="@customer.OpeningBalance.ToString()" />*@
+                        @*<TextInput Label="Balance As Of" @bind-Value="@customer.OpeningBalanceAt.ToString()" Type="date" />*@
+                    </div>
+                </div>
+
+                <div class="p-5">
+                    <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                        Extra
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 ">
+                        <CheckInput Label="Is Sub Customer" @bind-Value="@customer.SubCustomer" />
+                        @*<TextInput Label="Parent Customer" @bind-Value="@customer.ParentCustomer.ToString()" />*@
+                        <CheckInput Label="Bill parent" @bind-Value="@customer.BillParent" />
+                        @*<div class="grid space-y-2"> </div>*@
+                        <TextInput Label="Tax ID" @bind-Value="@customer.TaxId" />
+                        <CheckInput Label="Tax Exempted" @bind-Value="@customer.TaxExempted" />
                     </div>
                 </div>
             </EditForm>
@@ -91,6 +177,8 @@ else
 @code {
     [Parameter] public Guid Id { get; set; }
     public bool ShowBasicInfoForm { get; set; }
+    public bool ShowBillingAddress { get; set; }
+    public bool ShowShippingAddress { get; set; }
     public Customer customer { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -120,13 +208,49 @@ else
         Logger.LogInformation("Submitting Basic Info Form...");
     }
 
-    private void OpenBasicInfoForm(){
+    protected void HandleBillingAddressFormSubmit()
+    {
+        Logger.LogInformation("Submitting Billing Address Form...");
+    }
+
+    protected void HandleShippingAddressFormSubmit()
+    {
+        Logger.LogInformation("Submitting Shipping Address Form...");
+    }
+
+    private void OpenBasicInfoForm()
+    {
         ShowBasicInfoForm = true;
         StateHasChanged();
     }
 
-    private void CloseBasicInfoForm(){
+    private void CloseBasicInfoForm()
+    {
         ShowBasicInfoForm = false;
+        StateHasChanged();
+    }
+
+    private void OpenBillingAddressForm()
+    {
+        ShowBillingAddress = true;
+        StateHasChanged();
+    }
+
+    private void CloseBiilingAddressForm()
+    {
+        ShowBillingAddress = false;
+        StateHasChanged();
+    }
+
+    private void OpenShippingAddressForm()
+    {
+        ShowShippingAddress = true;
+        StateHasChanged();
+    }
+
+    private void CloseShippingAddressForm()
+    {
+        ShowShippingAddress = false;
         StateHasChanged();
     }
 }

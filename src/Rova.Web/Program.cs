@@ -1,10 +1,12 @@
+using System;
 using System.Net;
 using FluentValidation.AspNetCore;
 using MediatR;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Rova.Core;
 using Rova.Core.Services;
 using Rova.Data.Repository;
@@ -28,16 +30,21 @@ builder.Services.AddHttpClient("Default", c =>
     IHttpContextAccessor context = new HttpContextAccessor();
     var request = context?.HttpContext?.Request;
     c.BaseAddress = new Uri($"{request?.Scheme}://{request?.Host}");
-    c.Timeout = TimeSpan.FromSeconds(120);
+
+#if DEBUG
+    c.Timeout = TimeSpan.FromSeconds(36000);
+#else
+     c.Timeout = TimeSpan.FromSeconds(120);
+#endif
 
     c.DefaultRequestHeaders.Add("User-Agent", "Rova-Web");
-    //c.DefaultRequestHeaders.Add("Accept", "application/json");
-    //c.DefaultRequestHeaders.Add("Content-Type", "application/json");
 });
 builder.Services.AddSingleton<ICustomerRepository, CustomerRepository>();
+builder.Services.AddSingleton<ILeadRepository, LeadRepository>();
 
 // Register Rova Services
 builder.Services.AddSingleton<CustomerService>();
+builder.Services.AddSingleton<LeadService>();
 
 
 var app = builder.Build();

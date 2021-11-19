@@ -2,6 +2,12 @@
     --ggs: 0.75;
 }
 
+.gg-chevron-right::after{
+    width: 7px;
+    height: 7px;
+    top: 5px;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
