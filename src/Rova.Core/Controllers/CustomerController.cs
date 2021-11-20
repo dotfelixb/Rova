@@ -13,13 +13,13 @@ namespace Rova.Core.Controllers
 {
     public class CustomerController : MethodsController
     {
-        private readonly ILogger<CustomerController> Logger;
-        private readonly IMediator Mediatr;
+        private readonly ILogger<CustomerController> _logger;
+        private readonly IMediator _mediator;
 
         public CustomerController(ILogger<CustomerController> logger, IMediator mediatr)
         {
-            Logger = logger;
-            Mediatr = mediatr;
+            _logger = logger;
+            _mediator = mediatr;
         }
 
         [HttpGet("customers.get", Name = nameof(GetCustomer))]
@@ -27,7 +27,7 @@ namespace Rova.Core.Controllers
         [ProducesResponseType(typeof(ErrorResult), 404)]
         public async Task<IActionResult> GetCustomer([FromQuery] GetCustomerCommand model)
         {
-            var result = await Mediatr.Send(model);
+            var result = await _mediator.Send(model);
             var rst = JsonSerializer.Serialize(result);
 
             if (!result.Ok)
@@ -43,7 +43,7 @@ namespace Rova.Core.Controllers
         [ProducesResponseType(typeof(ErrorResult), 400)]
         public async Task<IActionResult> ListCustomer([FromQuery] ListCustomerCommand model)
         {
-            var result = await Mediatr.Send(model);
+            var result = await _mediator.Send(model);
             var rst = JsonSerializer.Serialize(result);
 
             return Ok(rst);
@@ -54,7 +54,7 @@ namespace Rova.Core.Controllers
         [ProducesResponseType(typeof(ErrorResult), 400)]
         public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerCommand model)
         {
-            var result = await Mediatr.Send(model);
+            var result = await _mediator.Send(model);
             var rst = JsonSerializer.Serialize(result);
 
             if (!result.Ok)

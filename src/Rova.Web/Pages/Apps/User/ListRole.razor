@@ -1,0 +1,87 @@
+@page "/app/roles"
+@using Rova.Model.Domain
+@using Microsoft.Extensions.Logging
+@inject ILogger<ListRole> _logger
+@inject Rova.Core.Services.RoleService _roleervice
+@inject NavigationManager _navmanager
+
+<PageTitle>List Role</PageTitle>
+
+<PageView>
+    <Title></Title>
+    <Toolbar>
+        <div class="px-1">
+            <MenuButton>
+                <MenuButtonItem Text="Print" LeadingIconClass="gg-printer" />
+                <MenuButtonItem Text="Report" LeadingIconClass="gg-file" />
+                <MenuButtonItem Text="DashBoard" leadingIconClass="gg-board" />
+            </MenuButton>
+        </div>
+        <div>
+            <LinkButton To="/app/roles/new"
+                        Title="New Role"
+                        ButtonType="primary"
+                        LeadingIconClass="gg-math-plus">
+            </LinkButton>
+        </div>
+    </Toolbar>
+    <SideView>
+        <div>
+            <div class="pb-3">
+                <span class="cursor-default uppercase text-xs font-semibold text-gray-500">
+                    Roles
+                </span>
+            </div>
+        </div>
+    </SideView>
+    <Content>
+        <ListView TItem="RoleExtended" Columns="@_columns" DataSource="@_roles"></ListView>
+    </Content>
+</PageView>
+
+@code {
+    private Dictionary<string, Dictionary<string, string>> _columns = new()
+    {
+        {
+            "Rolename",
+            new()
+            {
+                { "display", "Role" },
+                { "type", "link" },
+                { "format", "/app/users/{0}" }
+            }
+        },
+        {
+            "Enabled",
+            new()
+            {
+                { "display", "Enabled" }
+            }
+        },
+        {
+            "CreatedAt",
+            new()
+            {
+                { "display", "Created Date" },
+                { "type", "date" },
+                { "format", "MMM dd, yyyy" }
+            }
+        }
+    };
+    
+    private IEnumerable<RoleExtended> _roles { get; set; } = Enumerable.Empty<RoleExtended>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _logger.LogInformation("Fetching Roles");
+        
+        var result = await _roleervice.ListRole();
+        
+        if (result.Ok)
+        {
+            _roles = result.Data;
+        }
+        
+        _logger.LogInformation("Fetching Roles complete with status [{0}]", result.Ok ? "Success" : "Failed");
+    }
+}

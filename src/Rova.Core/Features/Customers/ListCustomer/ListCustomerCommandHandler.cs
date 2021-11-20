@@ -13,14 +13,10 @@ namespace Rova.Core.Features.Customers.ListCustomer
         : IRequestHandler<ListCustomerCommand, ListResult<Customer>>
     {
         private readonly ICustomerRepository _customerRepository;
-        private readonly IMapper _mapper;
 
-        public ListCustomerCommandHandler(
-            ICustomerRepository customerRepository
-            , IMapper mapper)
+        public ListCustomerCommandHandler(ICustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
-            _mapper = mapper;
         }
 
         public async Task<ListResult<Customer>> Handle(

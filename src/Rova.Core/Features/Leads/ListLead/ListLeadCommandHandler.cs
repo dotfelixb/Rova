@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,23 +8,13 @@ using Rova.Model.Domain;
 
 namespace Rova.Core.Features.Leads.ListLead
 {
-    public class ListLeadCommand : IRequest<ListResult<LeadExtended>>
-    {
-        public int Offset { get; set; } = 0;
-        public int Limit { get; set; } = 1000;
-    }
-    
     public class ListLeadCommandHandler : IRequestHandler<ListLeadCommand, ListResult<LeadExtended>>
     {
-        private readonly ILeadRepository _leadRepository;
-        private readonly IMapper _mapper;
+        private readonly ILeadRepository _leadRepository; 
         
-        public ListLeadCommandHandler(
-            ILeadRepository leadRepository
-            , IMapper mapper)
+        public ListLeadCommandHandler(ILeadRepository leadRepository)
         {
-            _leadRepository = leadRepository;
-            _mapper = mapper;
+            _leadRepository = leadRepository; 
         }
         
         public async Task<ListResult<LeadExtended>> Handle(

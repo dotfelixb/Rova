@@ -10,7 +10,7 @@ namespace Rova.Data.Repository
 {
     public interface ILeadRepository
     {
-        Task<IEnumerable<LeadExtended>> List(int offset, int limit);
+        Task<IEnumerable<LeadExtended>> List(int offset = 0, int limit = 1000);
         Task<long> GenerateLeadCode();
         Task<int> CreateLead(Lead lead, DbAuditLog auditLog);
     }
@@ -24,11 +24,11 @@ namespace Rova.Data.Repository
         {
         }
 
-        public Task<IEnumerable<LeadExtended>> List(int offset=0, int limit=1000)
+        public Task<IEnumerable<LeadExtended>> List(int offset = 0, int limit = 1000)
         {
             return WithConnection(conn =>
             {
-                var query = @"SELECT id, code, title, firstname
+                const string query = @"SELECT id, code, title, firstname
                                 , lastname, birthat, gender, displayname
                                 , company, phone, mobile, website
                                 , email, campaign, (SELECT displayname FROM campaign WHERE id = l.campaign) AS campaignname 

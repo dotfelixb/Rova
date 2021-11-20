@@ -1,0 +1,57 @@
+@page "/app/roles/new"
+@using Microsoft.Extensions.Logging 
+@using Rova.Core.Features.Roles.CreateRole
+@using Microsoft.AspNetCore.Components
+@inject ILogger<NewRole> _logger
+@inject Rova.Core.Services.RoleService _roleservice
+@inject NavigationManager _navmanager
+
+<PageTitle>New User</PageTitle>
+
+<PageView>
+    <Title>
+        <div>
+            <span class="pageTitle">New User</span>
+            <NotSaved />
+        </div>
+    </Title>
+    <Toolbar>
+        <div class="flex flex-row space-x-2">
+            <div>
+                <Button Text="Save" ButtonType="primary" OnClick="@HandleOnValidSubmit" />
+            </div>
+        </div>
+    </Toolbar>
+    <SideView>
+    </SideView>
+    <Content>
+        <EditForm Model="@_role" OnValidSubmit="@HandleOnValidSubmit">
+            <div class="p-5">
+                <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                    Basic
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-2 gap-5">
+                    <TextInput Label="Role Name" @bind-Value="@_role.Rolename"/>
+                </div>
+            </div>
+        </EditForm>
+    </Content>
+</PageView>
+
+@code {
+    CreateRoleCommand _role = new();
+
+    async void HandleOnValidSubmit()
+    {
+        _logger.LogInformation("Sending CreateRoleCommand request");
+        var result = await _roleservice.CreateRole(_role);
+
+        _logger.LogInformation("Creating Role request complete with status {0}"
+            , result.Ok ? "Success" : "Failed");
+
+        if (result.Ok)
+        {
+            _navmanager.NavigateTo("/app/roles");
+        }
+    }
+}

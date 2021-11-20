@@ -4,27 +4,27 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Rova.Core.Features.Leads.CreateLead;
-using Rova.Core.Features.Leads.ListLead;
+using Rova.Core.Features.Roles.CreateRole;
+using Rova.Core.Features.Roles.ListRole;
 using Rova.Model.Domain;
 
 namespace Rova.Core.Controllers
 {
-    public class LeadController : MethodsController
+    public class RoleController : MethodsController
     {
-        private readonly ILogger<LeadController> _logger;
+        private readonly ILogger<RoleController> _logger;
         private readonly IMediator _mediator;
 
-        public LeadController(ILogger<LeadController> logger, IMediator mediatr)
+        public RoleController(ILogger<RoleController> logger, IMediator mediatr)
         {
             _logger = logger;
             _mediator = mediatr;
         }
-
-        [HttpGet("leads.list", Name = nameof(ListLead))]
-        [ProducesResponseType(typeof(ListResult<LeadExtended>), 200)]
+        
+        [HttpGet("roles.list", Name = nameof(ListRole))]
+        [ProducesResponseType(typeof(ListResult<RoleExtended>), 200)]
         [ProducesResponseType(typeof(ErrorResult), 400)]
-        public async Task<IActionResult> ListLead([FromQuery] ListLeadCommand model)
+        public async Task<IActionResult> ListRole([FromQuery] ListRoleCommand model)
         {
             var result = await _mediator.Send(model);
             var rst = JsonSerializer.Serialize(result);
@@ -32,10 +32,10 @@ namespace Rova.Core.Controllers
             return Ok(rst);
         }
 
-        [HttpPost("leads.create", Name = nameof(CreateLead))]
+        [HttpPost("roles.create", Name = nameof(CreateRole))]
         [ProducesResponseType(typeof(SingleResult<Guid>), 201)]
         [ProducesResponseType(typeof(ErrorResult), 400)]
-        public async Task<IActionResult> CreateLead([FromBody] CreateLeadCommand model)
+        public async Task<IActionResult> CreateRole([FromBody] CreateRoleCommand model)
         {
             var result = await _mediator.Send(model);
             var rst = JsonSerializer.Serialize(result);
@@ -44,9 +44,9 @@ namespace Rova.Core.Controllers
             {
                 return BadRequest(rst);
             }
-
+            
             var baseUri = $"{Request.Scheme}://{Request.Host}";
-            var uri = $"{baseUri}/methods/leads.get?leadid={result.Data}";
+            var uri = $"{baseUri}/methods/roles.get?roleid={result.Data}";
 
             return Created(uri, rst);
         }

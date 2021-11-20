@@ -18,7 +18,11 @@
             </MenuButton>
         </div>
         <div>
-            <LinkButton To="/app/leads/new" Title="New Lead" ButtonType="primary" LeadingIconClass="gg-math-plus"></LinkButton>
+            <LinkButton To="/app/leads/new" 
+                        Title="New Lead" 
+                        ButtonType="primary" 
+                        LeadingIconClass="gg-math-plus">
+            </LinkButton>
         </div>
     </Toolbar>
     <SideView>
@@ -72,7 +76,7 @@
             }
         };
 
-    public IEnumerable<LeadExtended> Leads { get; set; } = Enumerable.Empty<LeadExtended>();
+    private IEnumerable<LeadExtended> Leads { get; set; } = Enumerable.Empty<LeadExtended>();
 
     protected override async Task OnInitializedAsync()
     {

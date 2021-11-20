@@ -1,0 +1,93 @@
+@page "/app/users"
+@using Rova.Model.Domain
+@using Microsoft.Extensions.Logging
+@inject ILogger<ListUser> _logger
+@inject Rova.Core.Services.UserService _userervice
+@inject NavigationManager _navmanager
+
+<PageTitle>List User</PageTitle>
+
+<PageView>
+    <Title></Title>
+    <Toolbar>
+        <div class="px-1">
+            <MenuButton>
+                <MenuButtonItem Text="Print" LeadingIconClass="gg-printer" />
+                <MenuButtonItem Text="Report" LeadingIconClass="gg-file" />
+                <MenuButtonItem Text="DashBoard" leadingIconClass="gg-board" />
+            </MenuButton>
+        </div>
+        <div>
+            <LinkButton To="/app/users/new"
+                        Title="New User"
+                        ButtonType="primary"
+                        LeadingIconClass="gg-math-plus">
+            </LinkButton>
+        </div>
+    </Toolbar>
+    <SideView>
+        <div>
+            <div class="pb-3">
+                <span class="cursor-default uppercase text-xs font-semibold text-gray-500">
+                    Users
+                </span>
+            </div>
+        </div>
+    </SideView>
+    <Content>
+        <ListView TItem="UserExtended" Columns="@_columns" DataSource="@_users"></ListView>
+    </Content>
+</PageView>
+
+@code {
+    private Dictionary<string, Dictionary<string, string>> _columns = new()
+    {
+        {
+            "Username",
+            new()
+            {
+                { "display", "Username" },
+                { "type", "link" },
+                { "format", "/app/users/{0}" }
+            }
+        },{
+            "Email",
+            new()
+            {
+                { "display", "Email" }
+            }
+        },
+        {
+            "Enabled",
+            new()
+            {
+                { "display", "Enabled" }
+            }
+        },
+        {
+            "CreatedAt",
+            new()
+            {
+                { "display", "Created Date" },
+                { "type", "date" },
+                { "format", "MMM dd, yyyy" }
+            }
+        }
+    };
+
+    private IEnumerable<UserExtended> _users { get; set; } = Enumerable.Empty<UserExtended>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _logger.LogInformation("Fetching Users");
+        
+        var result = await _userervice.ListUser();
+        
+        if (result.Ok)
+        {
+            _users = result.Data;
+        }
+        
+        _logger.LogInformation("Fetching Users complete with status [{0}]", result.Ok ? "Success" : "Failed");
+    }
+}
