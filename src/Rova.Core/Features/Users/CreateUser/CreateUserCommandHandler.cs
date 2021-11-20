@@ -6,26 +6,27 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MassTransit;
 using MediatR;
-using Rova.Core.Extensions;
 using Rova.Data.Repository;
 using Rova.Model.Domain;
 
-namespace Rova.Core.Features.Leads.CreateLead
+namespace Rova.Core.Features.Users.CreateUser
 {
-    public class CreateLeadCommandHandler 
-        : IRequestHandler<CreateLeadCommand, SingleResult<Guid>>
+    public class CreateUserCommandHandler 
+        : IRequestHandler<CreateUserCommand, SingleResult<Guid>>
     {
-        private readonly ILeadRepository _leadRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public CreateLeadCommandHandler(ILeadRepository leadRepository, IMapper mapper)
+        public CreateUserCommandHandler(
+            IUserRepository userRepository
+            , IMapper mapper)
         {
-            _leadRepository = leadRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
         public async Task<SingleResult<Guid>> Handle(
-            CreateLeadCommand request
+            CreateUserCommand request
             , CancellationToken cancellationToken)
         {
             var jsonOptions = new JsonSerializerOptions
@@ -33,25 +34,23 @@ namespace Rova.Core.Features.Leads.CreateLead
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
 
-            var code = await _leadRepository.GenerateLeadCode();
-            var lead = _mapper.Map<CreateLeadCommand, Lead>(request);
-            lead.Id = NewId.NextGuid();
-            lead.Code = code.FormatCode("LD");
-
-            lead.DisplayName ??= $"{lead.FirstName} {lead.LastName}";
-
-            var auditLog = new DbAuditLog()
+            var user = _mapper.Map<CreateUserCommand, User>(request);
+            user.Id = NewId.NextGuid();
+            user.Username ??= user.Email.Split("@")[0];
+            user.DisplayName ??= user.Username;
+            
+            var auditLog = new DbAuditLog
             {
                 Id = NewId.NextGuid(),
-                TargetId = lead.Id,
-                ActionName = "lead.create",
-                ObjectName = "lead",
-                ObjectData = JsonSerializer.Serialize(lead, jsonOptions),
+                TargetId = user.Id,
+                ActionName = "users.create",
+                ObjectName = "users",
+                ObjectData = JsonSerializer.Serialize(user, jsonOptions),
                 // TODO: Fix user
                 CreatedBy = NewId.NextGuid()
             };
 
-            var rst = await _leadRepository.CreateLead(lead, auditLog);
+            var rst = await _userRepository.CreateUser(user, auditLog);
             if (rst < 1)
             {
                 return new SingleResult<Guid>
@@ -63,7 +62,7 @@ namespace Rova.Core.Features.Leads.CreateLead
 
             return new SingleResult<Guid>
             {
-                Data = lead.Id,
+                Data = user.Id,
                 Ok = true,
                 Type = "single"
             };

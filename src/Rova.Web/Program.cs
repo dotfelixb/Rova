@@ -41,10 +41,13 @@ builder.Services.AddHttpClient("Default", c =>
 });
 builder.Services.AddSingleton<ICustomerRepository, CustomerRepository>();
 builder.Services.AddSingleton<ILeadRepository, LeadRepository>();
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
 // Register Rova Services
 builder.Services.AddSingleton<CustomerService>();
 builder.Services.AddSingleton<LeadService>();
+builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<RoleService>();
 
 
 var app = builder.Build();

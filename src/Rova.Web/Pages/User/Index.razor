@@ -1,0 +1,22 @@
+@page "/user"
+
+<PageTitle>Users</PageTitle>
+
+<PageView>
+  <Title>User</Title>
+   <SideView>
+    <AppSideView />
+  </SideView>
+  <Content>
+    <div class="">
+      <div class="text-lg text-gray-500 font-semibold p-3">
+        Your links
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2n xl:grid-cols-3 gap-4 p-3">
+        <AppLink To="/app/users" Title="Users" Data="1 active" />   
+        <AppLink To="/app/roles" Title="Role" Data="5 active" />   
+        @* <AppLink To="/app/userrole" Title="User Roles" Data="5 active" />    *@
+      </div>
+    </div>
+  </Content>
+</PageView>

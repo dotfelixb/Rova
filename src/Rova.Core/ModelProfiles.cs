@@ -2,6 +2,8 @@
 using Rova.Core.Extensions;
 using Rova.Core.Features.Customers.CreateCustomer;
 using Rova.Core.Features.Leads.CreateLead;
+using Rova.Core.Features.Roles.CreateRole;
+using Rova.Core.Features.Users.CreateUser;
 using Rova.Model.Domain;
 
 namespace Rova.Core
@@ -22,6 +24,8 @@ namespace Rova.Core
                 .ForMember(d=>d.Campaign,
                     opt => opt.MapFrom(s=> s.Campaign.ToGuid()));
 
+            CreateMap<CreateUserCommand, User>();
+            CreateMap<CreateRoleCommand, Role>();
         }
     }
 }

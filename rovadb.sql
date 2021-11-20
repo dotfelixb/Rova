@@ -42,10 +42,11 @@ CREATE TABLE IF NOT EXISTS InstallModule
 CREATE TABLE IF NOT EXISTS Users
 (
 	id UUID PRIMARY KEY	
-	, installid UUID
-	, username VARCHAR(50)
+	, username VARCHAR(50) unique
 	, displayname VARCHAR(100)
-	, enabled BOOLEAN default(FALSE)
+	, email VARCHAR(100) unique
+	, passwordhash TEXT
+	, enabled BOOLEAN DEFAULT(FALSE)
 	, deleted BOOLEAN DEFAULT(FALSE)
 	, createdby UUID
 	, createdat TIMESTAMPTZ DEFAULT(now())
@@ -53,14 +54,27 @@ CREATE TABLE IF NOT EXISTS Users
 	, updatedat TIMESTAMPTZ DEFAULT(now())
 );
 
-INSERT INTO users(id, username, displayname, enabled, createdby, updatedby) 
+INSERT INTO users(id, username, displayname, email, passwordhash, enabled, createdby, updatedby) 
 VALUES(
 	'00000000-0000-0000-0000-000000000001', 
 	'root', 
-	'Root', 
+	'Root',
+	'root@app.com',
+	'', 
 	TRUE, 
 	'00000000-0000-0000-0000-000000000001', 
 	'00000000-0000-0000-0000-000000000001'
+)
+
+CREATE TABLE IF NOT EXISTS UserAuditLog 
+(
+	id UUID PRIMARY KEY
+	, targetId UUID
+	, actionname VARCHAR(50) 
+	, objectname VARCHAR(50)
+	, objectdata JSONB
+	, createdby UUID
+	, createdat TIMESTAMPTZ DEFAULT(now())
 )
 
 CREATE TABLE IF NOT EXISTS Roles
@@ -74,6 +88,7 @@ CREATE TABLE IF NOT EXISTS Roles
 	, updatedby UUID
 	, updatedat TIMESTAMPTZ DEFAULT(now())
 );
+
 INSERT INTO roles (id, rolename, enabled, createdby, updatedby)
 VALUES(
 	'00000000-0000-0000-0000-000000000001', 
@@ -81,6 +96,17 @@ VALUES(
 	TRUE, 
 	'00000000-0000-0000-0000-000000000001', 
 	'00000000-0000-0000-0000-000000000001'
+)
+
+CREATE TABLE IF NOT EXISTS RoleAuditLog 
+(
+	id UUID PRIMARY KEY
+	, targetId UUID
+	, actionname VARCHAR(50) 
+	, objectname VARCHAR(50)
+	, objectdata JSONB
+	, createdby UUID
+	, createdat TIMESTAMPTZ DEFAULT(now())
 )
 
 CREATE TABLE IF NOT EXISTS UserRoles
@@ -104,6 +130,17 @@ VALUES(
 	TRUE, 
 	'00000000-0000-0000-0000-000000000001', 
 	'00000000-0000-0000-0000-000000000001'
+)
+
+CREATE TABLE IF NOT EXISTS UserRoleAuditLog 
+(
+	id UUID PRIMARY KEY
+	, targetId UUID
+	, actionname VARCHAR(50) 
+	, objectname VARCHAR(50)
+	, objectdata JSONB
+	, createdby UUID
+	, createdat TIMESTAMPTZ DEFAULT(now())
 )
 
 CREATE TABLE IF NOT EXISTS Customer 

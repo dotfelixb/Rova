@@ -1,0 +1,60 @@
+@page "/app/users/new"
+@using Microsoft.Extensions.Logging 
+@using Rova.Core.Features.Users.CreateUser
+@inject ILogger<NewUser> _logger
+@inject Rova.Core.Services.UserService _userservice
+@inject NavigationManager _navmanager
+
+<PageTitle>New User</PageTitle>
+
+<PageView>
+    <Title>
+        <div>
+            <span class="pageTitle">New User</span>
+            <NotSaved />
+        </div>
+    </Title>
+    <Toolbar>
+        <div class="flex flex-row space-x-2">
+            <div>
+                <Button Text="Save" ButtonType="primary" OnClick="@HandleOnValidSubmit" />
+            </div>
+        </div>
+    </Toolbar>
+    <SideView>
+    </SideView>
+    <Content>
+        <EditForm Model="@_user" OnValidSubmit="@HandleOnValidSubmit">
+            <div class="p-5">
+                <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
+                    Basic
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-2 gap-5">
+                    <TextInput Label="Display Name" @bind-Value="@_user.DisplayName"/>
+                    <TextInput Label="Email" @bind-Value="@_user.Email" Error="true"/>
+                    <div></div>
+                    <TextInput Label="Username" @bind-Value="@_user.Username" />
+                    
+                </div>
+            </div>
+        </EditForm>
+    </Content>
+</PageView>
+
+@code {
+    CreateUserCommand _user = new();
+
+    async void HandleOnValidSubmit()
+    {
+        _logger.LogInformation("Sending CreateUserCommand request");
+        var result = await _userservice.CreateUser(_user);
+
+        _logger.LogInformation("Creating User request complete with status {0}"
+            , result.Ok ? "Success" : "Failed");
+
+        if (result.Ok)
+        {
+            _navmanager.NavigateTo("/app/users");
+        }
+    }
+}

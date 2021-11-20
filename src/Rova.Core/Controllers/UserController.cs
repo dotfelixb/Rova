@@ -4,38 +4,38 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Rova.Core.Features.Leads.CreateLead;
-using Rova.Core.Features.Leads.ListLead;
+using Rova.Core.Features.Users.CreateUser;
+using Rova.Core.Features.Users.ListUser;
 using Rova.Model.Domain;
 
 namespace Rova.Core.Controllers
 {
-    public class LeadController : MethodsController
+    public class UserController : MethodsController
     {
-        private readonly ILogger<LeadController> _logger;
+        private readonly ILogger<UserController> _logger;
         private readonly IMediator _mediator;
 
-        public LeadController(ILogger<LeadController> logger, IMediator mediatr)
+        public UserController(ILogger<UserController> logger, IMediator mediatr)
         {
             _logger = logger;
             _mediator = mediatr;
         }
 
-        [HttpGet("leads.list", Name = nameof(ListLead))]
-        [ProducesResponseType(typeof(ListResult<LeadExtended>), 200)]
+        [HttpGet("users.list", Name = nameof(ListUser))]
+        [ProducesResponseType(typeof(ListResult<UserExtended>), 200)]
         [ProducesResponseType(typeof(ErrorResult), 400)]
-        public async Task<IActionResult> ListLead([FromQuery] ListLeadCommand model)
+        public async Task<IActionResult> ListUser([FromQuery] ListUserCommand model)
         {
             var result = await _mediator.Send(model);
             var rst = JsonSerializer.Serialize(result);
 
             return Ok(rst);
         }
-
-        [HttpPost("leads.create", Name = nameof(CreateLead))]
+        
+        [HttpPost("users.create", Name = nameof(CreateUser))]
         [ProducesResponseType(typeof(SingleResult<Guid>), 201)]
         [ProducesResponseType(typeof(ErrorResult), 400)]
-        public async Task<IActionResult> CreateLead([FromBody] CreateLeadCommand model)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand model)
         {
             var result = await _mediator.Send(model);
             var rst = JsonSerializer.Serialize(result);
@@ -44,9 +44,9 @@ namespace Rova.Core.Controllers
             {
                 return BadRequest(rst);
             }
-
+            
             var baseUri = $"{Request.Scheme}://{Request.Host}";
-            var uri = $"{baseUri}/methods/leads.get?leadid={result.Data}";
+            var uri = $"{baseUri}/methods/users.get?userid={result.Data}";
 
             return Created(uri, rst);
         }
