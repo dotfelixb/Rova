@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS Users
 	, displayname VARCHAR(100)
 	, email VARCHAR(100) unique
 	, passwordhash TEXT
-	, enabled BOOLEAN DEFAULT(FALSE)
+	, enabled BOOLEAN DEFAULT(TRUE)
 	, deleted BOOLEAN DEFAULT(FALSE)
 	, createdby UUID
 	, createdat TIMESTAMPTZ DEFAULT(now())
@@ -64,7 +64,7 @@ VALUES(
 	TRUE, 
 	'00000000-0000-0000-0000-000000000001', 
 	'00000000-0000-0000-0000-000000000001'
-)
+);
 
 CREATE TABLE IF NOT EXISTS UserAuditLog 
 (
@@ -75,13 +75,13 @@ CREATE TABLE IF NOT EXISTS UserAuditLog
 	, objectdata JSONB
 	, createdby UUID
 	, createdat TIMESTAMPTZ DEFAULT(now())
-)
+);
 
 CREATE TABLE IF NOT EXISTS Roles
 (
 	id UUID PRIMARY KEY	
-	, rolename VARCHAR(50)
-	, enabled BOOLEAN default(FALSE)
+	, rolename VARCHAR(50) UNIQUE
+	, enabled BOOLEAN default(TRUE)
 	, deleted BOOLEAN DEFAULT(FALSE)
 	, createdby UUID
 	, createdat TIMESTAMPTZ DEFAULT(now())
@@ -96,7 +96,7 @@ VALUES(
 	TRUE, 
 	'00000000-0000-0000-0000-000000000001', 
 	'00000000-0000-0000-0000-000000000001'
-)
+);
 
 CREATE TABLE IF NOT EXISTS RoleAuditLog 
 (
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS RoleAuditLog
 	, objectdata JSONB
 	, createdby UUID
 	, createdat TIMESTAMPTZ DEFAULT(now())
-)
+);
 
 CREATE TABLE IF NOT EXISTS UserRoles
 (
@@ -130,7 +130,7 @@ VALUES(
 	TRUE, 
 	'00000000-0000-0000-0000-000000000001', 
 	'00000000-0000-0000-0000-000000000001'
-)
+);
 
 CREATE TABLE IF NOT EXISTS UserRoleAuditLog 
 (
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS UserRoleAuditLog
 	, objectdata JSONB
 	, createdby UUID
 	, createdat TIMESTAMPTZ DEFAULT(now())
-)
+);
 
 CREATE TABLE IF NOT EXISTS Customer 
 (
@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS CustomerAuditLog
 	, objectdata JSONB
 	, createdby UUID
 	, createdat TIMESTAMPTZ DEFAULT(now())
-)
+);
 
 CREATE SEQUENCE CustomerCode INCREMENT 1 START 1;
 
