@@ -34,7 +34,7 @@ builder.Services.AddHttpClient("Default", c =>
 #if DEBUG
     c.Timeout = TimeSpan.FromSeconds(36000);
 #else
-     c.Timeout = TimeSpan.FromSeconds(120);
+    c.Timeout = TimeSpan.FromSeconds(120);
 #endif
 
     c.DefaultRequestHeaders.Add("User-Agent", "Rova-Web");

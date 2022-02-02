@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS InstallModule
 	, updatedat TIMESTAMPTZ DEFAULT(now())
 );
 
-CREATE TABLE IF NOT EXISTS Users
+CREATE TABLE IF NOT EXISTS "user"
 (
 	id UUID PRIMARY KEY	
 	, username VARCHAR(50) unique
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS Users
 	, updatedat TIMESTAMPTZ DEFAULT(now())
 );
 
-INSERT INTO users(id, username, displayname, email, passwordhash, enabled, createdby, updatedby) 
+INSERT INTO "user"(id, username, displayname, email, passwordhash, enabled, createdby, updatedby) 
 VALUES(
 	'00000000-0000-0000-0000-000000000001', 
 	'root', 
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS UserAuditLog
 	, createdat TIMESTAMPTZ DEFAULT(now())
 );
 
-CREATE TABLE IF NOT EXISTS Roles
+CREATE TABLE IF NOT EXISTS "role"
 (
 	id UUID PRIMARY KEY	
 	, rolename VARCHAR(50) UNIQUE
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS Roles
 	, updatedat TIMESTAMPTZ DEFAULT(now())
 );
 
-INSERT INTO roles (id, rolename, enabled, createdby, updatedby)
+INSERT INTO "role" (id, rolename, enabled, createdby, updatedby)
 VALUES(
 	'00000000-0000-0000-0000-000000000001', 
 	'root', 
@@ -132,7 +132,7 @@ VALUES(
 	'00000000-0000-0000-0000-000000000001'
 );
 
-CREATE TABLE IF NOT EXISTS UserRoleAuditLog 
+CREATE TABLE IF NOT EXISTS UserRolesAuditLog 
 (
 	id UUID PRIMARY KEY
 	, targetId UUID

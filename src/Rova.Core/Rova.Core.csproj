@@ -40,7 +40,6 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="Features\" />
     <Folder Include="Features\Customers\" />
     <Folder Include="Features\Customers\CreateCustomer\" />
     <Folder Include="Extensions\" />

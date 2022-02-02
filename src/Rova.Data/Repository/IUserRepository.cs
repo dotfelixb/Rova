@@ -32,7 +32,7 @@ namespace Rova.Data.Repository
             {
                 const string query = @"SELECT id, username, displayname, email, enabled
 	                                    , deleted, createdby, createdat, updatedby, updatedat 
-                                        FROM public.users
+                                        FROM public.user
                                         OFFSET @Offset LIMIT @Limit;";
 
                 return conn.QueryAsync<UserExtended>(query, new
@@ -47,7 +47,7 @@ namespace Rova.Data.Repository
         {
             return WithConnection(async conn =>
             {
-                var userCmd = @"INSERT INTO public.users (
+                var userCmd = @"INSERT INTO public.user (
                                   id, username, displayname, email
                                   , passwordhash, enabled, createdby, updatedby) 
                           VALUES(@Id, @Username, @DisplayName, @Email
