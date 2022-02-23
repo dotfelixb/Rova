@@ -7,15 +7,15 @@ namespace Rova.Core.Features.Customers.CreateCustomer
         public CreateCustomerCommandValidator()
         {
             RuleFor(r => r.FirstName)
-                .NotNull()
+                .NotEmpty()
                 .When(r => r.DisplayName == null);
 
             RuleFor(r => r.LastName)
-                .NotNull()
+                .NotEmpty()
                 .When(r => r.DisplayName == null);
 
             RuleFor(r => r.DisplayName)
-                .NotNull()
+                .NotEmpty()
                 .When(r => r.FirstName == null && r.LastName == null);
         }
     }

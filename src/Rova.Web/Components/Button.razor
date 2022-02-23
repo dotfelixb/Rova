@@ -8,6 +8,8 @@
     [Parameter] public string ButtonType { get; set; } = "default";
     [Parameter] public string FormType { get; set; } = "";
     [Parameter] public Action OnClick {get;set;}
+    [Parameter] public bool Wide { get; set; } = false;
+
     public string MainClassName {get;set;}
 
     protected override void OnInitialized( ){
@@ -16,14 +18,19 @@
         switch(ButtonType){
             case "primary":
                 {
-                    if(Disable) { className.Append("btn-primary-disabled");}
-                    className.Append("btn-primary"); break;
+                    if(Disable) { className.Append(" btn-primary-disabled ");}
+                    className.Append(" btn-primary "); break;
                 }
             default:
                 {
-                    if(Disable) { className.Append("btn-default-disabled");}
-                    className.Append("btn-default"); break;
+                    if(Disable) { className.Append(" btn-default-disabled ");}
+                    className.Append(" btn-default "); break;
                 }
+        }
+
+        if (Wide)
+        {
+            className.Append(" w-full ");
         }
 
         MainClassName = className.ToString();
