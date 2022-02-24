@@ -1,22 +1,25 @@
 ﻿@page "/user/login"
 @using Rova.Core.Features.Users.Login
+
 @layout AuthLayout
 @attribute [AllowAnonymous]
 
 <PageTitle>Login</PageTitle>
+<Toast Show="@ShouldShow" />
+<Toast Show="true" Message="Password is incorrect!"/>
 
 <PageView>
-  <Title>
+    <Title>
         <div>
             <span class="pageTitle">Login</span>
             <NotSaved Title="Not Logged In" />
         </div>
     </Title>
-  <SideView>
-  </SideView>
-  <Content>
-              <EditForm Model="@login" OnValidSubmit="@HandleOnValidSubmit">
-      <div class="flex w-full place-content-center">
+    <SideView>
+    </SideView>
+    <Content>
+        <EditForm Model="@login" OnValidSubmit="@HandleOnValidSubmit">
+            <div class="flex w-full place-content-center">
                 <div class="p-5  w-2/5">
                     <div class="text-xs text-gray-300 font-semibold pb-3 uppercase">
                         Log in to your account
@@ -25,21 +28,27 @@
                         <TextInput Label="Email" @bind-Value="@login.Email" />
                         <TextInput Type="password" Label="Password" @bind-Value="@login.Password" />
                     </div>
-
-                    <div class="py-5  ">
+                    <div class="py-3">
+                        <NavLink href="/user/forget" >
+                            <span class="text-xs text-indigo-500">Forget password?</span>
+                        </NavLink>
+                    </div>
+                    <div class="">
                         <Button Text="Login" Wide="true" ButtonType="primary" OnClick="@HandleOnValidSubmit" />
                     </div>
                 </div>
 
-      </div>
-            </EditForm>
-  </Content>
+            </div>
+        </EditForm>
+    </Content>
 </PageView>
 
 @code {
     LoginCommand login = new();
+    private bool ShouldShow;
 
-    async void HandleOnValidSubmit()
+    void HandleOnValidSubmit()
     {
+        ShouldShow = true;
     }
 }

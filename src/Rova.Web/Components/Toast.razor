@@ -1,0 +1,39 @@
+﻿@using System
+@using System.Timers
+ 
+@if (Show)
+{
+     <div id="@Id" class="absolute top-0 right-0 z-50 p-5 ">
+        <div class="bg-red-600 px-5 py-3 rounded drop-shadow-xl">
+           <span class="text-xs text-white">
+                @Message
+           </span>
+        </div>
+    </div>  
+}
+
+@code {
+    [Parameter] public bool Show {get;set;} = false;
+    [Parameter] public string Message { get; set; } = "A Simple Toast Notification";
+    [Parameter] public int Timeout { get; set; } = 5;
+    public Guid Id { get; set; } = Guid.NewGuid();
+    Timer timer = new();
+
+    protected override void OnInitialized()
+    {
+        timer.Interval = Timeout * 1000;
+        timer.Enabled = true;
+        timer.AutoReset = true;
+        timer.Elapsed += Close;
+        timer.Start();
+    }
+
+    async void Close(Object source, ElapsedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            Show = false;
+            StateHasChanged();
+        });
+    }
+}
