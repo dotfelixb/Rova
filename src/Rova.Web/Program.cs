@@ -1,16 +1,13 @@
-using System;
 using System.Net;
 using FluentValidation.AspNetCore;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Rova.Core;
 using Rova.Core.Services;
 using Rova.Data.Repository;
 using Rova.Model;
+using Rova.Model.AuthProvider;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+// auth
+builder.Services.AddIdentity<AuthUser, AuthRole>().AddDefaultTokenProviders();
+builder.Services.AddTransient<IUserStore<AuthUser>, AuthUserRepository>();
+builder.Services.AddTransient<IRoleStore<AuthRole>, AuthRoleRepository>();
+
 builder.Services.AddMediatR(typeof(IFeatureService));
 builder.Services.AddAutoMapper(typeof(ModelProfiles));
 builder.Services.AddControllers(options =>
@@ -46,9 +49,7 @@ builder.Services.AddSingleton<ILeadRepository, LeadRepository>();
 builder.Services.AddSingleton<CustomerService>();
 builder.Services.AddSingleton<LeadService>();
 
-
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

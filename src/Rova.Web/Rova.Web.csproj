@@ -6,7 +6,7 @@
     <UserSecretsId>0d645e0e-b6d8-47ae-b627-fd89950b6e78</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
-	  <NpmLastInstall>node_modules/.last-install</NpmLastInstall>
+	<NpmLastInstall>node_modules/.last-install</NpmLastInstall>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,13 +27,6 @@
     <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="Pages\Apps\Lead\ListLead.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Pages\Apps\Lead\ListLead.cshtml.cs" />
-  </ItemGroup>
 	<Target Name="CheckForNpm" BeforeTargets="NpmInstall">
 		<!-- Ensure Node.js is installed -->
 		<Exec Command="node --version" ContinueOnError="true">

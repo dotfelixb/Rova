@@ -28,7 +28,7 @@ namespace Rova.Data.Repository
 
         public Task<CustomerExtended> Get(Guid customerId)
         {
-            return WithConnection(conn =>
+            return WithConnection(async conn =>
             {
                 var query = @"SELECT id, code, title, firstname
                                 , lastname, birthat, gender, displayname
@@ -45,7 +45,7 @@ namespace Rova.Data.Repository
                             WHERE id = @CustomerId;
                             ";
 
-                return conn.QueryFirstOrDefaultAsync<CustomerExtended>(query, new
+                return await conn.QueryFirstOrDefaultAsync<CustomerExtended>(query, new
                 {
                     CustomerId = customerId
                 });

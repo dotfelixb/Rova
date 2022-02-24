@@ -39,13 +39,19 @@ CREATE TABLE IF NOT EXISTS InstallModule
 	, updatedat TIMESTAMPTZ DEFAULT(now())
 );
 
-CREATE TABLE IF NOT EXISTS Users
+CREATE TABLE IF NOT EXISTS AuthUser
 (
 	id UUID PRIMARY KEY	
 	, installid UUID
-	, username VARCHAR(50)
-	, displayname VARCHAR(100)
+	, employeeid UUID
+	, username VARCHAR(100)
+	, name VARCHAR(50)
+	, email VARCHAR(100)
+	, emailconfirmed BOOLEAN default(FALSE)
 	, enabled BOOLEAN default(FALSE)
+	, passwordhash VARCHAR(150)
+	, normalizedusername VARCHAR(100)
+	, authenticationtype VARCHAR(100)
 	, deleted BOOLEAN DEFAULT(FALSE)
 	, createdby UUID
 	, createdat TIMESTAMPTZ DEFAULT(now())
@@ -63,7 +69,7 @@ VALUES(
 	'00000000-0000-0000-0000-000000000001'
 )
 
-CREATE TABLE IF NOT EXISTS Roles
+CREATE TABLE IF NOT EXISTS AuthRole
 (
 	id UUID PRIMARY KEY	
 	, rolename VARCHAR(50)

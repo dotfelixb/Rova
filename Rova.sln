@@ -10,13 +10,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8BFF8E27-58C1-4A41-9B6A-52E423327B2E}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		rovadb.sql = rovadb.sql
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rova.Core", "src\Rova.Core\Rova.Core.csproj", "{4DF039C3-D664-458A-A516-7292880EB8E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rova.Core", "src\Rova.Core\Rova.Core.csproj", "{4DF039C3-D664-458A-A516-7292880EB8E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rova.Model", "src\Rova.Model\Rova.Model.csproj", "{ACAE9802-8F99-4CEF-AF0D-025BF47EDF55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rova.Model", "src\Rova.Model\Rova.Model.csproj", "{ACAE9802-8F99-4CEF-AF0D-025BF47EDF55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rova.Data", "src\Rova.Data\Rova.Data.csproj", "{5CBFCA3A-EFA1-48FF-8032-EDFF9F5ED743}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rova.Data", "src\Rova.Data\Rova.Data.csproj", "{5CBFCA3A-EFA1-48FF-8032-EDFF9F5ED743}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

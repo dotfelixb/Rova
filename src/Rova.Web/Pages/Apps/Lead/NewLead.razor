@@ -114,8 +114,9 @@
 @code {
     CreateLeadCommand lead = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
+        throw new NotImplementedException();
     }
     
     async void HandleOnValidSubmit()
